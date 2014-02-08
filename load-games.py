@@ -45,16 +45,42 @@ def get_matches():
                 'id':      xml.find('Id').text,
                 'home_id': xml.find('HomeTeam_Id').text ,
                 'away_id': xml.find('AwayTeam_Id').text ,
-                'league':  xml.find('League').text
+                'home':    xml.find('HomeTeam').text ,
+                'away':    xml.find('AwayTeam').text ,
+                'league':  xml.find('League').text,
+                'time':    '' if xml.find('Time') is None else xml.find('Time').text
         }
-        if match['league'] in config.LEAGUES:
-            # generate
-            matchid = int(match['id'])
 
-            with open('data/games/new/%d.json' % matchid, 'w') as f:
-                f.write(json.dumps(match, sort_keys=True, indent=4, separators=(',', ': ')))
 
-            new += 0
+        matchid = int(match['id'])
+
+        if not match['league'] in config.LEAGUES:
+            continue
+
+        paths = {state: 'data/games/%s/%d' % (state,matchid) for state in ['new', 'finished', 'process', 'archive']}
+
+            
+        # if game is alread done or processed, ignore it
+        if os.path.exists(paths['finished']) or \
+                os.path.exists(paths['process']) or \
+                os.path.exists(paths['archive']):
+            continue
+        
+        # if game is done now, we need to remove it from new
+        if match['time'] == 'Finished':
+            path = paths['finished']
+            finished += 1
+            if os.path.exists(paths['new']):
+                os.remove(paths['new'])
+        else:
+            path = paths['new']
+            if os.path.exists(path):
+                updated += 1
+            else:
+                new += 1
+
+        with open(path, 'w') as f:
+            f.write(json.dumps(match, sort_keys=True, indent=4, separators=(',', ': ')))
 
             #self.away_id  = xml.find('AwayTeam_Id').text
             #self.home     = xml.find('HomeTeam').text
