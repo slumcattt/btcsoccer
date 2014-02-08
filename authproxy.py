@@ -148,4 +148,4 @@ class AuthServiceProxy(object):
                 'code': -342, 'message': 'missing HTTP response from server'})
 
         return json.loads(http_response.read().decode('utf8'),
-                          parse_float=decimal.Decimal)
+                         parse_float=decimal.Decimal)
