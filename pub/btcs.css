@@ -1,0 +1,6 @@
+
+
+
+body > section { display: none; }
+body > section#games { display: inherit; }
+
