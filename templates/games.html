@@ -1,73 +1,36 @@
 
 
       {{#games}}
-      Live
-      {{#live}}
-      <div data-id="{{id}}">
-        <p class="date">{{date}}
-        <p class="league">{{league}}
-        <p class="location">{{location}}
-        <p class="time">{{time}}
-        <p class="home team-{{home_id}}">{{home}}
-        <p class="away team-{{away_id}}">{{away}}
-          <dd class="bets">
-            <table>
-            {{#results}}
-            <tr>
-              {{#row}}
-              <td>
-                <a href="bitcoin:{{address}}">{{score}}</a> ({{bets}})
-              {{/row}}
-            
-            {{/results}}
-            </table>
-        </div>
-
+        <h3>Live</h3>
+        <ul>
+        {{#live}}
+          <li>
+          <div class="home">{{home}}</div>
+          <div class="away">{{away}}</div>
+          <div class="date">{{date}}</div>
         {{/live}}
-        Today
+        </ul>
+
+        <h3>Today</h3>
+        <ul>
         {{#today}}
-      <div data-id="{{id}}">
-        <p class="date">{{date}}
-        <p class="league">{{league}}
-        <p class="location">{{location}}
-        <p class="time">{{time}}
-        <p class="home team-{{home_id}}">{{home}}
-        <p class="away team-{{away_id}}">{{away}}
-          <dd class="bets">
-            <table>
-            {{#results}}
-            <tr>
-              {{#row}}
-              <td>
-                <a href="bitcoin:{{address}}">{{score}}</a> ({{bets}})
-              {{/row}}
-            
-            {{/results}}
-            </table>
-        </div>
+          <li>
+          <div class="home">{{home}}</div>
+          <div class="away">{{away}}</div>
+          <div class="date">{{date}}</div>
         {{/today}}
-        Later
+        </ul>
+
+        <h3>Later</h3>
+        <ul>
         {{#later}}
-      <div data-id="{{id}}">
-        <p class="date">{{date}}
-        <p class="league">{{league}}
-        <p class="location">{{location}}
-        <p class="time">{{time}}
-        <p class="home team-{{home_id}}">{{home}}
-        <p class="away team-{{away_id}}">{{away}}
-          <dd class="bets">
-            <table>
-            {{#results}}
-            <tr>
-              {{#row}}
-              <td>
-                <a href="bitcoin:{{address}}">{{score}}</a> ({{bets}})
-              {{/row}}
-            
-            {{/results}}
-            </table>
-        </div>
+          <li>
+          <div class="home">{{home}}</div>
+          <div class="away">{{away}}</div>
+          <div class="date">{{date}}</div>
         {{/later}}
+        </ul>
+
       {{/games}}
     </ul>
 

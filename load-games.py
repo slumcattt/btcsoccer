@@ -6,6 +6,7 @@ import os
 
 from xml.etree import ElementTree
 from datetime import date, datetime, timedelta
+import dateutil.parser
 import time
 import simplejson as json
 import urllib2, re
@@ -51,6 +52,8 @@ def get_matches():
                 'time':    '' if xml.find('Time') is None else xml.find('Time').text
         }
 
+        localtime = xml.find('Date').text
+        match['date'] = dateutil.parser.parse(localtime).astimezone(dateutil.tz.tzutc()).isoformat()
 
         matchid = int(match['id'])
 
@@ -88,7 +91,6 @@ def get_matches():
             #self.location = xml.find('Location').text
             #self.league   = xml.find('League').text
             #self.id       = xml.find('Id').text
-            #self.localtime = xml.find('Date').text
 
             #    self.is_done  = xml.find('Time') is not None and xml.find('Time').text == 'Finished'
 

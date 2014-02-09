@@ -7,13 +7,15 @@
     <meta name="author" content="Tomas van der Wansem <tomas@btcsoccer.com>">
     <meta name="keywords" content="bitcoin soccer betting">
     <meta name="description" content="Peer to peer betting on soccer results with Bitcoin">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+
     <link rel="stylesheet" href="btcs.css">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
     <script src="btcs.js"></script>
   </head>
   <body>
     <header>
-        <h1>BTC Soccer</h1>
+      <h1><div id="logo"></div></h1>
         <!--
         <ul>
           <li>Peer-to-peer betting on soccer results
@@ -22,19 +24,23 @@
           <li>As secure and transparent as the blockchain
         </ul>
         -->
+      <nav>
+          <ul>
+            <li><div>Games<div></li>
+            <li>Chat</li>
+            <li>MyBets</a>
+            <li>Stats</a>
+            <li>FAQ</a>
+          </ul>
+      </nav>
     </header>
-    <nav>
-        <ul>
-          <li>Games</li>
-          <li>Chat</li>
-          <li>MyBets</a>
-          <li>Stats</a>
-          <li>FAQ</a>
-        </ul>
-    </nav>
 
     <section id="games">
-      Games
+      <div>All leagues</div>
+
+      <div id="gamelist">
+      </div>
+        
     </section>
 
     <section id="chat">
@@ -50,7 +56,6 @@
     </section>
 
     <section id="faq">
-        FAQ
     </section>
   </body>
 </html>
