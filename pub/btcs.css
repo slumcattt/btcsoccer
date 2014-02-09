@@ -49,15 +49,29 @@ nav ul li {
    background-color:#eceff0;
    height: 2em;
 }
-
+table { 
+    border-spacing: 0;
+    border-collapse: collapse;
+}
 nav ul li:nth-child(5) { border-right: none; }
 
 section { margin-top: 6em;clear: both; }
 
 section {color: #eee; }
-#games li:hover,
-#games li.selected { background-color: #ffb54b; }
-#games li {background-color: #eceff0; color: #222; list-style: none; position:relative;margin-bottom:1px;}
+#games li .overview:hover,
+#games li.selected .overview { background-color: #ffb54b; }
+#games li {background-color: #eceff0; color: #222; list-style: none; margin-bottom:1px;}
+#games li .overview { position:relative;}
 #games li div {padding:3px; }
 #games li div.date {position:absolute; left: 40%; top: 20%; font-size: 75%;}
+
+#games li table { display: none; }
+#games li.selected table { display: table; }
+
+#games li table { width: 100%; max-width: 500px; c}
+#games li table td { width: 15%; height: 2em; background-color: #6fa9e4; border: 1px #bbb solid; }
+#games li table th {  height: 2em; background-color: #565656; border: 1px #bbb solid;  }
+#games li table td,
+#games li table th { text-align: center; }
+#games li table tr:nth-child(1) th:nth-child(1) { background-color: #ffb54b; }
 

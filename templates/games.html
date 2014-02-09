@@ -5,9 +5,22 @@
         <ul>
         {{#live}}
           <li>
-          <div class="home">{{home}}</div>
-          <div class="away">{{away}}</div>
-          <div class="date">{{date}}</div>
+            <div class="overview">
+              <div class="home">{{home}}</div>
+              <div class="away">{{away}}</div>
+              <div class="date">{{date}}</div>
+            </div>
+            <table class="result">
+              <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
+              {{#results}}
+              <tr><th>{{away}} 
+                  {{#cols}}
+                      <td>{{score}}
+                  {{/cols}}
+              {{/results}}
+
+            </table>
+
         {{/live}}
         </ul>
 
@@ -15,9 +28,22 @@
         <ul>
         {{#today}}
           <li>
-          <div class="home">{{home}}</div>
-          <div class="away">{{away}}</div>
-          <div class="date">{{date}}</div>
+            <div class="overview">
+              <div class="home">{{home}}</div>
+              <div class="away">{{away}}</div>
+              <div class="date">{{date}}</div>
+            </div>
+            <table class="result">
+              <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
+              {{#results}}
+              <tr><th>{{away}} 
+                  {{#cols}}
+                      <td>{{score}}
+                  {{/cols}}
+              {{/results}}
+
+            </table>
+
         {{/today}}
         </ul>
 
@@ -25,9 +51,21 @@
         <ul>
         {{#later}}
           <li>
-          <div class="home">{{home}}</div>
-          <div class="away">{{away}}</div>
-          <div class="date">{{date}}</div>
+            <div class="overview">
+              <div class="home">{{home}}</div>
+              <div class="away">{{away}}</div>
+              <div class="date">{{date}}</div>
+            </div>
+            <table class="result">
+              <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
+              {{#results}}
+              <tr><th>{{away}} 
+                  {{#cols}}
+                      <td>{{score}}
+                  {{/cols}}
+              {{/results}}
+
+            </table>
         {{/later}}
         </ul>
 

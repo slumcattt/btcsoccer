@@ -1,5 +1,6 @@
 
 /* main js */
+var update_games_interval = 30000;
 
 
 // menu navigation
@@ -25,9 +26,23 @@ $(function() {
     $('#gamelist').load('var/games.html');
     window.setInterval(function() {
        $('#gamelist').load('var/games.html');
-       }, 5000);
+       }, update_games_interval);
 
 });
+
+// opening games
+$(function() {
+    $('#games').on('click', 'li', function() {
+        console.log('select game');
+        if ($(this).hasClass('selected'))
+            $(this).removeClass('selected');
+        else
+        {
+            $('#games li.selected').removeClass('selected')
+            $(this).addClass('selected');
+        }
+    })
+})
 
 
 // Hide Header on on scroll down

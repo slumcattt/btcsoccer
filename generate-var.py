@@ -30,16 +30,19 @@ def generate_pub():
 
     accounts = []
 
-    maxtime_live = (datetime.utcnow() + timedelta(minutes = config.DEADLINE_MINS)).isoformat()
+    for game in games:
+        game['results'] = [ { "away": a, "cols": [ {
+                "account": "x",
+                "score": "1" 
+            } for h in range(6) ] } for a in range(6) ]
+
+    # split in live/today/later
     now = datetime.utcnow()
+    maxtime_live = (now + timedelta(minutes = config.DEADLINE_MINS)).isoformat()
     maxtime_today = datetime(now.year, now.month, now.day, 23,59,59,0, None).isoformat()
-    print(maxtime_live)
-    print(maxtime_today)
-    # browse all active bets
     live  = [ game for game in games if game['date'] < maxtime_live]
     today = [ game for game in games if game['date'] >= maxtime_live and game['date'] < maxtime_today]
     later = [ game for game in games if game['date'] >= maxtime_today]
-
     alldata = { 'games': { 'live': live, 'today': today, 'later': later } }
     
     render('games.html', alldata)
