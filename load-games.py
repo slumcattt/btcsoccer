@@ -1,5 +1,16 @@
 #!/usr/bin/python
 
+# script will load games from xmlsoccer feed
+# and store/update the files in data/games accordingly
+#
+# games in data/games/finished or data/games/process or data/games/archive
+# are not touched even fi they are changed
+# 
+# games in data/games/new are overwritten with new data
+#
+# games are moved to data/games/finished when done
+
+
 import config
 
 import os
@@ -85,18 +96,9 @@ def get_matches():
         with open(path, 'w') as f:
             f.write(json.dumps(match, sort_keys=True, indent=4, separators=(',', ': ')))
 
-            #self.away_id  = xml.find('AwayTeam_Id').text
-            #self.home     = xml.find('HomeTeam').text
-            #self.away     = xml.find('AwayTeam').text
-            #self.location = xml.find('Location').text
-            #self.league   = xml.find('League').text
-            #self.id       = xml.find('Id').text
-
-            #    self.is_done  = xml.find('Time') is not None and xml.find('Time').text == 'Finished'
-
-            #home = int(xml.find('HomeGoals').text)
-            #away = int(xml.find('AwayGoals').text)
-            #self.score = "%d-%d" % (home,away)
+        #home = int(xml.find('HomeGoals').text)
+        #away = int(xml.find('AwayGoals').text)
+        #self.score = "%d-%d" % (home,away)
 
     print('matches processed %d new, %d updated, %d finished' % (new, updated, finished))
 
