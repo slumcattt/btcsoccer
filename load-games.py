@@ -30,10 +30,12 @@ def get_matches():
     url   = "%s/GetFixturesByDateInterval?apikey=%s&startDateString=%s&endDateString=%s" \
             % (config.SOCCER_URL, config.SOCCER_KEY, start, end)
     
+    match_file = config.path('cache', 'matches.xml')
 
-    if os.path.exists(config.MATCHES_FILE) and (time.time() - os.path.getmtime(config.MATCHES_FILE) < 60 * 10):
-        print('Reading matchcache from %s' % config.MATCHES_FILE)
-        matches_data = open(config.MATCHES_FILE).read()
+    if os.path.exists(match_file) and (time.time() - os.path.getmtime(match_file) < 60 * 10):
+        print('Reading matchcache from %s' % match_file)
+        with open(match_file, 'r') as f:
+            matches_data = f.read()
     else:
         print('Reading from %s ' % url)
         matches_data = urllib2.urlopen(url).read()
@@ -46,7 +48,7 @@ def get_matches():
         raise Exception('No matches returned; data read: %s' % matches_data)
 
     # cache results
-    with open(config.MATCHES_FILE, 'w') as f:
+    with open(match_file, 'w') as f:
         f.write(matches_data)
 
     new, updated, finished = 0, 0, 0
@@ -71,7 +73,7 @@ def get_matches():
         if not match['league'] in config.LEAGUES:
             continue
 
-        paths = {state: 'data/games/%s/%d' % (state,matchid) for state in ['new', 'finished', 'process', 'archive']}
+        paths = {state: config.path('games/'+state,matchid) for state in ['new', 'finished', 'process', 'archive']}
 
             
         # if game is alread done or processed, ignore it

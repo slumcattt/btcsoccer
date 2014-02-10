@@ -8,7 +8,6 @@ SOCCER_KEY   = "PHVDAYLCCFJMPDZSUODPDARGUNEWQFEJEZBAXLKFEJQMBTUNVH"
 
 LEAGUES      = ('Serie A', 'La Liga', 'Eredivisie')
 
-MATCHES_FILE = "data/cache/matches.xml"
 
 MAX_DAYS_BEFORE   = 20
 MAX_DAYS_AFTER    = 25
@@ -32,3 +31,5 @@ ROUND_WINS = Decimal('0.000001')
 BTCS_FEE = Decimal('0.03')
 BTCS_FEE_ADDRESS = '1FH21q37yFpzvd5mdWckeyvqwTY96day8E'
 
+def path(sub, id):
+    return 'data/%s/%s' % (sub, str(id))

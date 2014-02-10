@@ -15,25 +15,25 @@ def render(template, data):
     "Renders a mustache template"
     renderer = pystache.Renderer()
     html = renderer.render_path('templates/' + template, data)
-    with open('data/var/' + template, "w") as f:
+    with open(config.path('var', template), "w") as f:
         f.write(html.encode('utf8'))
 
     print('Written: ' + template)
+
 def generate_pub():
 
     # load all active games in memory
 
     
-    game_files = os.listdir('data/games/new')
+    game_files = os.listdir(config.path('games/new', ''))
 
-    games = [ json.loads(open('data/games/new/'+game,'r').read()) for game in game_files ]
+    games = [ json.loads(open(config.path('games/new',game),'r').read()) for game in game_files ]
 
     accounts = []
 
     for game in games:
         game['results'] = [ { "away": a, "cols": [ {
-                "account": "x",
-                "score": "1" 
+                "score": "0" 
             } for h in range(6) ] } for a in range(6) ]
 
     # split in live/today/later

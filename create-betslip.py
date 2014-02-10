@@ -37,7 +37,7 @@ def save_betslip(betslip):
 
     # verify individual bets
     for game in betslip['bets']:
-        if not os.path.exists('data/games/new/%d' % int(game['game'])):
+        if not os.path.exists(config.path('games/new', int(game['game']))):
             raise web.internalerror('Game not found')
 
         if not re.match('^[0-5]-[0-5]$', game['result']):
@@ -49,7 +49,7 @@ def save_betslip(betslip):
 
     adr = wallet.getaddress(betslip['accountid'])
 
-    with open('data/bets/new/%s' % adr, 'w') as f:
+    with open(config.path('bets/new', adr, 'w') as f:
         f.write(json.dumps(betslip, sort_keys=True, indent=4, separators=(',', ': ')))
 
 
