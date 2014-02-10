@@ -1,6 +1,7 @@
 
 /* main js */
-var update_games_interval = 30000;
+var update_games_interval = 5000;
+var default_amount        = '0.002';
 
 
 // menu navigation
@@ -22,27 +23,76 @@ $(function() {
 
 
 // load games
+function loadGames() {
+    var $sel = $('#games li.selected').attr('id');
+    $('#gamelist').load('var/games.html', undefined, function() {
+        if ($sel)
+        {
+            console.log('reselecting game: ' + $sel);
+            $('#'+$sel).addClass('selected');
+        }
+        markBetslipBets();
+    });
+}
 $(function() {
-    $('#gamelist').load('var/games.html');
-    window.setInterval(function() {
-       $('#gamelist').load('var/games.html');
-       }, update_games_interval);
+    window.setInterval(function() { loadGames }, update_games_interval);
+    loadGames();
 
 });
 
 // opening games
 $(function() {
-    $('#games').on('click', 'li', function() {
+    $('#games').on('click', 'li .overview', function() {
         console.log('select game');
-        if ($(this).hasClass('selected'))
-            $(this).removeClass('selected');
+        var $li = $(this).closest('li');
+        if ($li.hasClass('selected'))
+            $li.removeClass('selected');
         else
         {
             $('#games li.selected').removeClass('selected')
-            $(this).addClass('selected');
+            $li.addClass('selected');
         }
     })
 })
+
+// reselect results
+function markBetslipBets() {
+    for(var k in localStorage)
+    {
+        if (/^game-/.test(k))
+        {
+            var fld = k.split(';');
+            var sel = '#' + fld[0] + ' tr:eq(' + (parseInt(fld[2])+1) + ') td:eq(' + (parseInt(fld[1])) + ')';
+            console.log('marking: ' + sel, $(sel));
+            $(sel).addClass('selected');
+
+        }
+    }
+    
+
+
+}
+
+// selecting results
+$(function() {
+    $('#games').on('click', 'td', function() {
+        $(this).toggleClass('selected');
+        var gameid = $(this).closest('li').attr('id')
+        var home   = $(this).index() -1;
+        var away   = $(this).parent().index() -1;
+        var bet    = gameid + ';' + home + ';' + away;
+        if (localStorage[bet])
+        {
+            localStorage.removeItem(bet);
+            $(this).removeClass('selected');
+        }
+        else
+        {
+            localStorage[bet] = default_amount;
+            $(this).addClass('selected')
+        }
+    });
+ });
 
 
 // Hide Header on on scroll down

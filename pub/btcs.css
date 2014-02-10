@@ -75,3 +75,5 @@ section {color: #eee; }
 #games li table th { text-align: center; }
 #games li table tr:nth-child(1) th:nth-child(1) { background-color: #ffb54b; }
 
+#games li table td.selected { background-color: #ffb54b; }
+
