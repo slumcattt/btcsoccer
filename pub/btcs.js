@@ -3,37 +3,67 @@
 var update_games_interval = 5000;
 var default_amount        = '0.002';
 
-
-// menu navigation
 $(function() {
-    $('nav li').on('click', function() {
-        $('body > section:visible').hide();
-        var tab = $(this).text().toLowerCase().trim();
+    window.location.hash = '';
+})
+
+function loadTab(tab) {
+    if ($('section'+tab).is(':visible'))
+    {
+        console.log('Tab ' + tab + ' already loaded');
         return;
-        $('#' + tab).show(); 
+    }
+    console.log('loading tab' + tab);
+    $('body > section:visible').hide();
 
-        if (tab == 'faq' && !window.faqloaded)
-        {
-            $('#faq').load('faq.html');
-            window.faqloaded = true;
-        }
+    location.hash = tab;
 
-    } );
+    $(tab).show();
+
+   if (tab == 'faq' && !window.faqloaded)
+   {
+      $('#faq').load('faq.html');
+      window.faqloaded = true;
+   }
+
+   else if (tab == '#chat' & !window.chatloaded)
+   {
+      $('#faq').load('faq.html');
+      window.chatloaded = true;
+      $('#chat').html('<iframe id="shoutmix_b6c3a6" src="http://sht.mx/b6c3a6"'
+          +' width="240" height="480" frameborder="0" scrolling="auto">'
+          +'<a href="http://sht.mx/b6c3a6">ShoutMix Live Chat</a></iframe>');
+   }
+
+   else if (tab == '#betslip')
+   {
+      showBets();
+   }
+}
+
+$(function() {
+    $('nav li, nav .betslip-btn').on('click', function() {
+        var tab = '#' + $(this).text().trim().toLowerCase();
+        loadTab(tab);
+    });
 });
 
+        
+// menu navigation
 $(function() {
     
     $(window).bind( 'hashchange', function(e) {
-        console.log(window.location.hash);
-        $('body > section:visible').hide();
-        $(window.location.hash).show();
+        if (!window.location.hash) return;
+        var tab = window.location.hash;
+        loadTab(tab);
     });
 });
 
 
-// load games
+// load games periodically
 function loadGames() {
     var $sel = $('#games li.selected').attr('id');
+    console.log('loading games');
     $('#gamelist').load('var/games.html', undefined, function() {
         if ($sel)
         {
@@ -41,21 +71,25 @@ function loadGames() {
             $('#'+$sel).addClass('selected');
         }
         markBetslipBets();
+
+        window.setTimeout(loadGames, update_games_interval);
     });
 }
 $(function() {
-    window.setInterval(function() { loadGames }, update_games_interval);
     loadGames();
-
 });
 
 // opening games
 $(function() {
     $('#games').on('click', 'li .overview', function() {
-        console.log('select game');
+
         var $li = $(this).closest('li');
+
+        console.log('select game ' + $li[0].id);
         if ($li.hasClass('selected'))
+        {
             $li.removeClass('selected');
+        }
         else
         {
             $('#games li.selected').removeClass('selected')
@@ -64,21 +98,38 @@ $(function() {
     })
 })
 
-// reselect results
+// reselect bets  
 function markBetslipBets() {
+    var anybets = false;
     for(var k in localStorage)
     {
         if (/^game-/.test(k))
         {
             var fld = k.split(';');
             var sel = '#' + fld[0] + ' tr:eq(' + (parseInt(fld[2])+1) + ') td:eq(' + (parseInt(fld[1])) + ')';
-            console.log('marking: ' + sel, $(sel));
             $(sel).addClass('selected');
+            anybets = true;
 
         }
     }
-    
+    $('header').toggleClass('has-betslip', anybets);
+}
 
+function showBets() {
+    
+    $('#betslip .games').empty();
+    for(var k in localStorage)
+    {
+        if (/^game-/.test(k))
+        {
+            var fld = k.split(';');
+            var $overview = $('#' + fld[0] + ' .overview').clone();
+            var $li = $('<li id="game-{{id}}">')
+                .append($overview);
+            $('#betslip .games').append($li);
+        }
+    }
+            
 
 }
 
@@ -100,6 +151,12 @@ $(function() {
             localStorage[bet] = default_amount;
             $(this).addClass('selected')
         }
+        var anybets = false;
+        for(var k in localStorage)
+            if (/^game-/.test(k))
+                anybets = true;
+        $('header').toggleClass('has-betslip', anybets);
+        
     });
  });
 

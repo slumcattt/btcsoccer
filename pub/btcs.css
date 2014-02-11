@@ -15,17 +15,21 @@ header h1 #logo {
    background-image: url(img/logo.png);
    background-repeat: no-repeat;
    background-size: contain;
-   width: 2em;
-   height: 2.1em;
+   width: 3em;
+   height: 2em;
+   display:block;
 
 }
 
 header {
+   background-color: yellow;
    position: fixed; height: 4em; top: 0;
    transition: top 0.2s ease-in-out;
    width: 100%;
    z-index:9999;
 }
+
+header.has-betslip { height: 6em; }
 
 .nav-up { top: -4em; }
 
@@ -35,6 +39,7 @@ ul {
    margin:0; 
 }
 
+nav ul { height: 2em; }
 nav ul li { 
    float:left;
    width:20%;
@@ -44,36 +49,48 @@ nav ul li {
    -moz-box-sizing: border-box;
    border-right: 1px #444 solid;
    border-bottom: 1px #444 solid;
-   padding-top: 0.4em;
    text-align:center;
    background-color:#eceff0;
    height: 2em;
+   padding-top: .4em;
 }
+nav ul li:nth-child(5) { border-right: none; }
+
+.betslip-btn { height: 2em; padding: 0.8em 0.8em; text-align: center;
+   box-sizing: border-box;
+   -ms-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+}
+
 table { 
     border-spacing: 0;
     border-collapse: collapse;
 }
-nav ul li:nth-child(5) { border-right: none; }
 
 section { margin-top: 6em;clear: both; }
 
 section {color: #eee; }
-#games li .overview:hover,
-#games li.selected .overview { background-color: #ffb54b; }
-#games li {background-color: #eceff0; color: #222; list-style: none; margin-bottom:1px;}
-#games li .overview { position:relative;}
-#games li div {padding:3px; }
-#games li div.date {position:absolute; left: 40%; top: 20%; font-size: 75%;}
+.games li .overview:hover,
+.games li.selected .overview { background-color: #ffb54b; }
+.games li {background-color: #eceff0; color: #222; list-style: none; margin-bottom:1px;}
+.games li .overview { position:relative;}
+.games li div {padding:3px; }
+.games li div.date {position:absolute; left: 40%; top: 20%; font-size: 75%;}
 
-#games li table { display: none; }
-#games li.selected table { display: table; }
+.games li table { display: none; }
+.games li.selected table { display: table; }
 
-#games li table { width: 100%; max-width: 500px; c}
-#games li table td { width: 15%; height: 2em; background-color: #6fa9e4; border: 1px #bbb solid; }
-#games li table th {  height: 2em; background-color: #565656; border: 1px #bbb solid;  }
-#games li table td,
-#games li table th { text-align: center; }
-#games li table tr:nth-child(1) th:nth-child(1) { background-color: #ffb54b; }
+.games li table { width: 100%; max-width: 500px; c}
+.games li table td { width: 15%; height: 2em; background-color: #6fa9e4; border: 1px #bbb solid;text-align: center; } 
+.games li table th {  height: 2em; background-color: #565656; border: 1px #bbb solid;  text-align: center; }
 
-#games li table td.selected { background-color: #ffb54b; }
+/* upper-left corner */
+.games li table tr:nth-child(1) th:nth-child(1) { background-color: #ffb54b; }
+
+.games li table td.selected { background-color: #ffb54b; }
+
+#betslip { background-color: yellow;}
+#betslip-btn { display: none; }
+.has-betslip #betslip-btn { display:block;}
 
