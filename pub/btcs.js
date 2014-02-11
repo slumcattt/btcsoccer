@@ -9,6 +9,7 @@ $(function() {
     $('nav li').on('click', function() {
         $('body > section:visible').hide();
         var tab = $(this).text().toLowerCase().trim();
+        return;
         $('#' + tab).show(); 
 
         if (tab == 'faq' && !window.faqloaded)
@@ -20,6 +21,14 @@ $(function() {
     } );
 });
 
+$(function() {
+    
+    $(window).bind( 'hashchange', function(e) {
+        console.log(window.location.hash);
+        $('body > section:visible').hide();
+        $(window.location.hash).show();
+    });
+});
 
 
 // load games
