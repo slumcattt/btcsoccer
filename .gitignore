@@ -2,3 +2,4 @@ data
 __pychche__
 *.pyc
 pub/var
+log
