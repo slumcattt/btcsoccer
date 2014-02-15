@@ -20,6 +20,7 @@ import dateutil.parser
 import time
 import simplejson as json
 import urllib2, re
+import logging
 
 import btcs
 def get_matches():
@@ -33,13 +34,13 @@ def get_matches():
     match_file = btcs.path('cache', 'matches.xml')
 
     if os.path.exists(match_file) and (time.time() - os.path.getmtime(match_file) < 60 * 10):
-        print('Reading matchcache from %s' % match_file)
+        logging.info('Reading matchcache from %s' % match_file)
         with open(match_file, 'r') as f:
             matches_data = f.read()
     else:
-        print('Reading from %s ' % url)
+        logging.info('Reading from %s ' % url)
         matches_data = urllib2.urlopen(url).read()
-        print('Read data (%d bytes)' % len(matches_data))
+        logging.info('Read data (%d bytes)' % len(matches_data))
 
     
     matches_xml  = ElementTree.fromstring(matches_data)
@@ -64,6 +65,9 @@ def get_matches():
                 'league':  xml.find('League').text,
                 'time':    '' if xml.find('Time') is None else xml.find('Time').text
         }
+
+        if not xml.find('HomeGoals') is None:
+            match['result'] = xml.find('HomeGoals').text + '-' + xml.find('AwayGoals').text
 
         localtime = xml.find('Date').text
         match['date'] = dateutil.parser.parse(localtime).astimezone(dateutil.tz.tzutc()).isoformat()
@@ -102,9 +106,11 @@ def get_matches():
         #away = int(xml.find('AwayGoals').text)
         #self.score = "%d-%d" % (home,away)
 
-    print('matches processed %d new, %d updated, %d finished' % (new, updated, finished))
+    logging.info('matches processed %d new, %d updated, %d finished' % (new, updated, finished))
 
 
 if __name__ == '__main__':
+    logging.basicConfig(level=logging.DEBUG)
+
     get_matches()
 

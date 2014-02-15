@@ -9,6 +9,7 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="btcs.css">
+    <link rel="shortcut icon" href="img/logo.png">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
     <script src="btcs.js"></script>
   </head>
@@ -17,20 +18,13 @@
       <h1><span id="logo"></span></h1>
       <nav>
           <ul>
-            <!--
-            <li><a href="#games-tab">Games</a>
-            <li><a href="#chat-tab">Chat</a>
-            <li><a href="#mybets-tab">MyBets</a>
-            <li><a href="#stats-tab">Stats</a>
-            <li><a href="#faq-tab">FAQ</a>
-            -->
             <li>Games</li>
-            <li>Chat
-            <li>MyBets
-            <li>Stats
-            <li>FAQ
+            <li>Chat</li>
+            <li>MyBets</li>
+            <li>Stats</li>
+            <li>FAQ</li>
           </ul>
-          <div class="betslip-btn">Betslip</div>
+          <div class="betslip-btn button">Betslip</div>
       </nav>
 
     </header>
@@ -44,18 +38,20 @@
     <section id="betslip">
         <ul class="games">
         </ul>
-      Your bets go here
+        <div>
+          Total x btc
+          <div class="checkout-btn button">Checkout</div>
+        </div>
+
+    </section>
+
+    <section id="checkout">
+        Creating QR code...
 
     </section>
 
     <section id="chat">
-      Chat coming soon
-      <!-- Begin ShoutMix 
-      <iframe id="shoutmix_b6c3a6" src="http://sht.mx/b6c3a6" width="240" height="480" frameborder="0" scrolling="auto">
-        <a href="http://sht.mx/b6c3a6">ShoutMix Live Chat</a>
-      </iframe> -->
-      <!-- End ShoutMix -->
-      <!--<iframe width="550" height="350" scrolling="no" src="http://widget.mibbit.com/?settings=8c99a9f54073bb7dfb3e46ef707b6549&server=irc.Mibbit.Net&channel=%23mywig_test"></iframe>-->
+      Chat loading...
     </section>
 
     <section id="mybets">

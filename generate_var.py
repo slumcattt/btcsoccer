@@ -13,7 +13,7 @@ import simplejson as json
 import logging
 
 
-# generate variadic files in pub/var
+# generate variadic files , key=lambda game: game['date'])/var
 
 def render(template, data):
     "Renders a mustache template"
@@ -73,15 +73,16 @@ def generate_pub():
         with open(btcs.path('var', accountid), 'w') as f:
             f.write(json.dumps(account, sort_keys=True, indent=4, separators=(',', ': ')))
 
+    games = sorted(games.values(), key=lambda game: game['date'])
 
 
     # split in live/today/later
     now = datetime.utcnow()
     maxtime_live = (now + timedelta(minutes = btcs.DEADLINE_MINS)).isoformat()
     maxtime_today = datetime(now.year, now.month, now.day, 23,59,59,0, None).isoformat()
-    live  = [ game for game in games.values() if game['date'] < maxtime_live]
-    today = [ game for game in games.values() if game['date'] >= maxtime_live and game['date'] < maxtime_today]
-    later = [ game for game in games.values() if game['date'] >= maxtime_today]
+    live  = [ game for game in games if game['date'] < maxtime_live]
+    today = [ game for game in games if game['date'] >= maxtime_live and game['date'] < maxtime_today]
+    later = [ game for game in games if game['date'] >= maxtime_today]
     alldata = { 'games': { 'live': live, 'today': today, 'later': later } }
     
     render('games.html', alldata)

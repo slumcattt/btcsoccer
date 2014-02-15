@@ -8,7 +8,7 @@ import os
 import simplejson as json
 from decimal import *
 
-import config
+import btcs
 import wallet
         
 web.config.debug = False
@@ -37,19 +37,19 @@ def save_betslip(betslip):
 
     # verify individual bets
     for game in betslip['bets']:
-        if not os.path.exists(config.path('games/new', int(game['game']))):
+        if not os.path.exists(btcs.path('games/new', int(game['game']))):
             raise web.internalerror('Game not found')
 
         if not re.match('^[0-5]-[0-5]$', game['result']):
             raise web.internalerror('Invalid result')
 
-        if not (config.MIN_BET <= Decimal(game['amount']) <= config.MAX_BET):
+        if not (btcs.MIN_BET <= Decimal(game['amount']) <= btcs.MAX_BET):
             raise web.internalerror('Invalid amount')
 
 
     adr = wallet.getaddress(betslip['accountid'])
 
-    with open(config.path('bets/new', adr, 'w') as f:
+    with open(btcs.path('bets/new', adr), 'w') as f:
         f.write(json.dumps(betslip, sort_keys=True, indent=4, separators=(',', ': ')))
 
 
@@ -63,6 +63,5 @@ if __name__ == "__main__":
         res = app.request('/create-betslip', 'POST', '{"accountid":"1234567","bets":[{"game":"326459","result":"1-0","amount":"0.002"}]}')
         print res
     else:
-        print(argv[-1])
         app.run()
 

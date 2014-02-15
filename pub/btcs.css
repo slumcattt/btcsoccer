@@ -1,4 +1,5 @@
 html { font-family: sans-serif; }
+    
 
 body { margin: 0; background: #565656;}
 
@@ -21,12 +22,15 @@ header h1 #logo {
 
 }
 
+h3 { margin: 0; font-size: 1em; }
+
 header {
    background-color: yellow;
    position: fixed; height: 4em; top: 0;
    transition: top 0.2s ease-in-out;
    width: 100%;
    z-index:9999;
+   overflow: hidden;
 }
 
 header.has-betslip { height: 6em; }
@@ -56,11 +60,12 @@ nav ul li {
 }
 nav ul li:nth-child(5) { border-right: none; }
 
-.betslip-btn { height: 2em; padding: 0.8em 0.8em; text-align: center;
+.button { height: 2em; padding: 0.8em 0.8em; text-align: center;
    box-sizing: border-box;
    -ms-box-sizing: border-box;
    -webkit-box-sizing: border-box;
    -moz-box-sizing: border-box;
+   color: #333;
 }
 
 table { 
@@ -81,7 +86,7 @@ section {color: #eee; }
 .games li table { display: none; }
 .games li.selected table { display: table; }
 
-.games li table { width: 100%; max-width: 500px; c}
+.games li table { width: 100%; max-width: 500px; }
 .games li table td { width: 15%; height: 2em; background-color: #6fa9e4; border: 1px #bbb solid;text-align: center; } 
 .games li table th {  height: 2em; background-color: #565656; border: 1px #bbb solid;  text-align: center; }
 

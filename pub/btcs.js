@@ -39,10 +39,14 @@ function loadTab(tab) {
    {
       showBets();
    }
+   else if (tab == '#checkout')
+   {
+      saveBetslip();
+   }
 }
 
 $(function() {
-    $('nav li, nav .betslip-btn').on('click', function() {
+    $('nav li, .button').on('click', function() {
         var tab = '#' + $(this).text().trim().toLowerCase();
         loadTab(tab);
     });
@@ -58,6 +62,62 @@ $(function() {
         loadTab(tab);
     });
 });
+
+
+function getAccountId()
+{
+    if (!localStorage['accountid'])
+    {
+        localStorage['accountid'] =  'xxxxxxxxxxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+            return v.toString(16);
+        });
+    }
+    return localStorage['accountid'];
+}
+
+function saveBetslip() {
+    var slip = {
+        accountid: getAccountId(),
+        bets: []
+    };
+
+    var total = 0.0;
+    for(var k in localStorage)
+    {
+        if (/^game-/.test(k))
+        {
+            var fld = k.split(';');
+            slip.bets.push({
+                game: fld[0].replace(/^[^-]+-/,''),
+                amount: localStorage[k],
+                result: fld[1] + '-' + fld[2]
+            });
+            total += parseFloat(localStorage[k]);
+
+
+        }
+    }
+    // generate sum
+    total = total.toFixed(3);
+    console.log(slip, total);
+    $.ajax({
+        url: 'create-betslip',
+        type: 'post',
+        //dataType: 'json',
+        data: JSON.stringify(slip),
+        contentType: "application/json",
+        success: function(data) { 
+            var uri = 'bitcoin:' + data +'?amount='+total;
+            var img = '//chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
+            $('#checkout').append('<img src="'+img + '">');
+            $('#checkout').append('<a href="' +uri +'">pay here</a>');
+        
+         }
+    });
+
+
+}
 
 
 // load games periodically
