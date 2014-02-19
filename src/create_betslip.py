@@ -20,13 +20,15 @@ app = web.application(urls, globals())
 
 class betslip:        
     def GET(self):
-        return 'Hello World'
+        return 'OK' # monitoring
+
     def POST(self):
         return save_betslip(json.loads(web.data()))
 
 
 def save_betslip(betslip):
     "Verify the betslip, create an address for it and return it"
+
     if not 'accountid' in betslip:
         raise web.internalerror('No accountid')
     if not re.match('^[a-zA-Z0-9]{6,20}$', betslip['accountid']):
@@ -49,9 +51,7 @@ def save_betslip(betslip):
 
     adr = wallet.getaddress(betslip['accountid'])
 
-    with open(btcs.path('bets/new', adr), 'w') as f:
-        f.write(json.dumps(betslip, sort_keys=True, indent=4, separators=(',', ': ')))
-
+    btcs.writejson(btcs.path('bets/new', adr), betslip)
 
     return adr
 

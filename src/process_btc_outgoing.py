@@ -11,22 +11,37 @@ import logging
 
 import wallet
 
-def process_outgoing(game):
+def process_outgoing(gameid):
 
-    logging.info('Processing game ' + game)
+    logging.info('Processing game ' + gameid)
 
     # read betslip
-    with open(btcs.path('games/finished', game),'r') as f:
-        game_data = json.loads(f.read())
+    with open(btcs.path('games/finished', gameid),'r') as f:
+        game = json.loads(f.read())
     
-    # We will found the
-    os.rename(btcs.path('games/finished', game),
-            btcs.path('games/process', game))
+
+    # collect all bets for this game
+    for betid in os.listdir(btcs.path('bets/received', '')):
+        with open(btcs.path('bets/received', betid),'r') as f:
+            betslip = json.loads(f.read())
+
+        for bet in betslip['bets']:
+            if bet['game'] == gameid:
+                logging.info('processing bets: %s', repr(bet))
+
+
+        
+    # move to process for atomicity
+    #os.rename(btcs.path('games/finished', gameid),
+    #        btcs.path('games/process', gameid))
 
 
 
-    os.rename(btcs.path('games/process', game),
-            btcs.path('games/archive', game))
+
+
+
+    #os.rename(btcs.path('games/process', gameid),
+    #        btcs.path('games/archive', gameid))
 
 
 

@@ -2,6 +2,7 @@
 # Config module 
 
 from decimal import *
+import simplejson as json
 
 SOCCER_URL   = "http://www.xmlsoccer.com/FootballData.asmx"
 SOCCER_KEY   = "PHVDAYLCCFJMPDZSUODPDARGUNEWQFEJEZBAXLKFEJQMBTUNVH"
@@ -32,5 +33,9 @@ BTCS_FEE = Decimal('0.03')
 BTCS_FEE_ADDRESS = '1FH21q37yFpzvd5mdWckeyvqwTY96day8E'
 
 def path(sub, id):
-    return 'data/%s/%s' % (sub, str(id))
+    return '../data/%s/%s' % (sub, str(id))
+
+def writejson(path, data):
+    with open(path, 'w') as f:
+        f.write(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
 

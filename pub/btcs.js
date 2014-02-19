@@ -1,7 +1,14 @@
 
 /* main js */
 var update_games_interval = 5000;
-var default_amount        = '0.002';
+var default_amount        = 2;
+var max_amount            = 100;
+
+
+
+/**********************
+ * Navigation *
+ **********************/
 
 $(function() {
     window.location.hash = '';
@@ -43,14 +50,27 @@ function loadTab(tab) {
    {
       saveBetslip();
    }
+
+   $('nav li').each(function() {
+     $(this).toggleClass('selected', (tab == '#' + $(this).text().toLowerCase()) );
+   });
+
+   $('.back-btn').toggle(tab == '#betslip');
+   forceUp();
 }
 
 $(function() {
-    $('nav li, .button').on('click', function() {
-        var tab = '#' + $(this).text().trim().toLowerCase();
+    $('nav li, .betslip-btn').on('click', function() {
+        //alert($(this).text());
+        var tab = '#' + $(this).text().trim().toLowerCase().replace(' ','');
         loadTab(tab);
     });
+
+    $('.back-btn, .continue-btn').on('click', function() { loadTab('#games'); });
+    $('.checkout-btn').on('click', function() { loadTab('#checkout'); });
 });
+
+
 
         
 // menu navigation
@@ -61,8 +81,8 @@ $(function() {
         var tab = window.location.hash;
         loadTab(tab);
     });
+    loadTab('games');
 });
-
 
 function getAccountId()
 {
@@ -76,7 +96,9 @@ function getAccountId()
     return localStorage['accountid'];
 }
 
+// save betslip on server and present payment address
 function saveBetslip() {
+   $('#checkout').empty().append('<p>Creating address...</p>');
     var slip = {
         accountid: getAccountId(),
         bets: []
@@ -93,13 +115,13 @@ function saveBetslip() {
                 amount: localStorage[k],
                 result: fld[1] + '-' + fld[2]
             });
-            total += parseFloat(localStorage[k]);
+            total += parseInt(localStorage[k]);
 
 
         }
     }
     // generate sum
-    total = total.toFixed(3);
+    total = (total/1000).toFixed(3);
     console.log(slip, total);
     $.ajax({
         url: 'create-betslip',
@@ -110,9 +132,9 @@ function saveBetslip() {
         success: function(data) { 
             var uri = 'bitcoin:' + data +'?amount='+total;
             var img = '//chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
+            $('#checkout').empty();
             $('#checkout').append('<img src="'+img + '">');
             $('#checkout').append('<a href="' +uri +'">pay here</a>');
-        
          }
     });
 
@@ -125,6 +147,15 @@ function loadGames() {
     var $sel = $('#games li.selected').attr('id');
     console.log('loading games');
     $('#gamelist').load('var/games.html', undefined, function() {
+        $('.date').each(function() {
+            $(this).html($(this).html().replace('T', '<br />'))
+        })
+
+        $('ul.games').each(function() {
+            $(this).prev().toggle($('li', this).length > 0);
+        });
+                
+            
         if ($sel)
         {
             console.log('reselecting game: ' + $sel);
@@ -158,23 +189,37 @@ $(function() {
     })
 })
 
-// reselect bets  
+// reselect bets in score tables from localstorage
 function markBetslipBets() {
     var anybets = false;
+    $('.games:not(.live) table.bets td.selected').removeClass('selected');
     for(var k in localStorage)
     {
         if (/^game-/.test(k))
         {
+
+            console.log('marking bets for ' + k);
             var fld = k.split(';');
-            var sel = '#' + fld[0] + ' tr:eq(' + (parseInt(fld[2])+1) + ') td:eq(' + (parseInt(fld[1])) + ')';
-            $(sel).addClass('selected');
-            anybets = true;
+            var sel = '.games:not(.live) #' + fld[0] + ' table.bets tr:eq(' + (parseInt(fld[2])+1) + ') td:eq(' + (parseInt(fld[1])) + ')';
+            var $sel = $(sel);
+            console.log('marking bets for ' + sel);
+            if ($sel.length == 0)
+            {
+                console.log('bet ' + k + ' no longer valid');
+                localStorage.removeItem(k);
+            }
+            else
+            {
+              $sel.addClass('selected');
+              anybets = true;
+            }
 
         }
     }
-    $('header').toggleClass('has-betslip', anybets);
+    $('body').toggleClass('has-betslip', anybets);
 }
 
+// Setup betslip section based on local storage
 function showBets() {
     
     $('#betslip .games').empty();
@@ -182,20 +227,92 @@ function showBets() {
     {
         if (/^game-/.test(k))
         {
+            // create a 
             var fld = k.split(';');
-            var $overview = $('#' + fld[0] + ' .overview').clone();
+            var $overview = $('<div class="overview">')
+            var $game = $('#' + fld[0] + ' .overview');
+
+            $overview.append($('<div class="home_score">').text(fld[1]));
+            $overview.append($('<div class="away_score">').text(fld[2]));
+
+            $overview.append($('.home', $game).clone());
+            $overview.append($('.away', $game).clone());
+            
+            console.log(k, localStorage[k] || default_amount);
+            $stake = $('<div class="stake-edit"><span class="label">MyStake</span></div>');
+            $stake.append('<input type="button" class="btn-minus" value="-">');
+            $stake.append($('<input data-storage="'+ k +'" class="v" type="number" min="2" max="100">').attr('value', localStorage[k]));
+            $stake.append('<input type="button" class="btn-plus" value="+">');
+            $overview.append($stake);
+            $overview.append('<input type="button" class="btn-remove" value="X">');
             var $li = $('<li id="game-{{id}}">')
                 .append($overview);
             $('#betslip .games').append($li);
+
         }
     }
-            
-
 }
+
+// **** betslip event handling
+$(function() { 
+
+    // minus/plus button
+    $('#betslip').on('click', '.btn-minus', function() {
+        var v = parseInt($(this).next().val());
+        if (v > default_amount)
+          $(this).next().val(--v);
+        save($(this).next());
+    });
+    $('#betslip').on('click', '.btn-plus', function() {
+        var v = parseInt($(this).prev().val());
+        if (v < max_amount)
+          $(this).prev().val(++v);
+        save($(this).prev());
+    });
+
+    // select on focus
+    $('#betslip').on('click', '.v', function() {
+        $(this).select();
+    });
+
+    // fix invalid amounts
+    // save on change
+    $('#betslip').on('blur', '.v', function() {
+        var v = parseInt($(this).val());
+        if (isNaN(v) || v < default_amount || v > max_amount)
+            $(this).val(default_amount);
+        save($(this));
+
+    });
+
+
+    // remove a bet
+    $('#betslip').on('click', '.btn-remove', function() {
+        var k = $(this).closest('li').find('input.v').attr('data-storage');
+        console.log($(this).closest('li'), k);
+        localStorage.removeItem(k);
+        $(this).closest('li').remove();
+        markBetslipBets();
+        if ($('#betslip ul.games li').length == 0)
+        {
+            // closing
+            $('.back-btn').click();
+        }
+
+        
+    })
+
+    // save the bet of the given input-box to localStorage
+    function save(inp) {
+        localStorage[inp.attr('data-storage')] = inp.val();
+    }
+
+
+});
 
 // selecting results
 $(function() {
-    $('#games').on('click', 'td', function() {
+    $('#games').on('click', '.games:not(.live) table.bets td', function() {
         $(this).toggleClass('selected');
         var gameid = $(this).closest('li').attr('id')
         var home   = $(this).index() -1;
@@ -215,7 +332,7 @@ $(function() {
         for(var k in localStorage)
             if (/^game-/.test(k))
                 anybets = true;
-        $('header').toggleClass('has-betslip', anybets);
+        $('body').toggleClass('has-betslip', anybets);
         
     });
  });
@@ -237,6 +354,11 @@ setInterval(function() {
         didScroll = false;
     }
 }, 250);
+
+function forceUp() {
+      $('header').removeClass('nav-up').addClass('nav-down');
+      didScoll = false;
+}
 
 function hasScrolled() {
     var st = $(this).scrollTop();

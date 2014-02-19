@@ -26,8 +26,11 @@ def process_incoming(betslip):
     for bets in betslip_data['bets']:
         total += Decimal(bets['amount'])
 
+    total = total / Decimal('1000')
+
     if recv == total:
         logging.info('Betslip %s: Received %s, moving to received' % (betslip, recv))
+        
         os.rename(btcs.path('bets/new', betslip), btcs.path('bets/received', betslip))
 
     else:

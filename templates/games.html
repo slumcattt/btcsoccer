@@ -1,8 +1,8 @@
 
 
       {{#games}}
-        <h3>Live</h3>
-        <ul class="games">
+        <h3>Live Games</h3>
+        <ul class="games live">
         {{#live}}
         <li id="game-{{id}}">
             <div class="overview">
@@ -10,9 +10,26 @@
               <div class="away_score">{{away_score}}</div>
               <div class="home">{{home}}</div>
               <div class="away">{{away}}</div>
-              <div class="date">{{date}}</div>
+              <div class="live">LIVE</div>
+              <div class="status">{{status}}</div>
+              <table class="stakes">
+                <tr>
+                  <th>TtlWagered:
+                  <td>{{total}}
+                  <td>
+                <tr>
+                  <th>MyStake:
+                  <td>0
+                  <td>
+                <tr>
+                  <th>MyMaxWin:
+                  <td>
+                  <td> 
+              </table>
+
+                  
             </div>
-            <table class="result">
+            <table class="bets">
               <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
               {{#results}}
               <tr><th>{{away}} 
@@ -26,7 +43,7 @@
         {{/live}}
         </ul>
 
-        <h3>Today</h3>
+        <h3>Today&apos;s Games</h3>
         <ul class="games">
         {{#today}}
         <li id="game-{{id}}">
@@ -34,8 +51,22 @@
               <div class="home">{{home}}</div>
               <div class="away">{{away}}</div>
               <div class="date">{{date}}</div>
+              <table class="stakes">
+                <tr>
+                  <th>TtlWagered:
+                  <td>{{total}}
+                  <td>
+                <tr>
+                  <th>MyStake:
+                  <td>0
+                  <td>
+                <tr>
+                  <th>MyMaxWin:
+                  <td>
+                  <td> 
+              </table>
             </div>
-            <table class="result">
+            <table class="bets">
               <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
               {{#results}}
               <tr><th>{{away}} 
@@ -49,7 +80,7 @@
         {{/today}}
         </ul>
 
-        <h3>Later</h3>
+        <h3>This Week&apos;s Games</h3>
         <ul class="games">
         {{#later}}
         <li id="game-{{id}}">
@@ -57,8 +88,22 @@
               <div class="home">{{home}}</div>
               <div class="away">{{away}}</div>
               <div class="date">{{date}}</div>
+              <table class="stakes">
+                <tr>
+                  <th>TtlWagered:
+                  <td>{{total}}
+                  <td>
+                <tr>
+                  <th>MyStake:
+                  <td>0
+                  <td>
+                <tr>
+                  <th>MyMaxWin:
+                  <td>
+                  <td> 
+              </table>
             </div>
-            <table class="result">
+            <table class="bets">
               <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
               {{#results}}
               <tr><th>{{away}} 
