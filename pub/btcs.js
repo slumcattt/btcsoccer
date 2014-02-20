@@ -27,7 +27,7 @@ function loadTab(tab) {
 
     $(tab).show();
 
-   if (tab == 'faq' && !window.faqloaded)
+   if (tab == '#faq' && !window.faqloaded)
    {
       $('#faq').load('faq.html');
       window.faqloaded = true;

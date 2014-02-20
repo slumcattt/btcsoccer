@@ -220,3 +220,10 @@ input {
    -webkit-box-sizing: border-box;
    -moz-box-sizing: border-box;
 }
+
+
+.faq li a { font-weight: 300; color: #ffb54b; line-height:1.3em; }
+.faq h4 a { font-weight: 300; color: #ffb54b; padding-left: 12px; text-decoration: none; }
+.faq p { font-weight: 300; color: #ebecf0; padding: 0 12px; }
+.faq li { padding: 0 12px; }
+
