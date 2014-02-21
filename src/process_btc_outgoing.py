@@ -13,7 +13,7 @@ import logging
 
 import wallet
 
-DRYRUN = True
+DRYRUN = False
 
 def within_deadline(game, bet):
     bettime  = datetime.datetime.fromtimestamp(bet['latesttx']['time'], dateutil.tz.tzutc())
@@ -121,7 +121,7 @@ def process_outgoing(gameid):
         payout(correctbet, total )
 
     elif len(wrongbet) > 0:
-        logging.info('Only wrong bets: ' + repr(correctbet))
+        logging.info('Only wrong bets: ' + repr(wrongbet))
 
         payout(wrongbet, sum_bets(wrongbet))
 

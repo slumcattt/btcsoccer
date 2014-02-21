@@ -1,16 +1,31 @@
 #!/usr/bin/python
 
 import logging
+import logging.handlers
 import time
 
 import load_games
 import process_btc_incoming
-#import process_btc_outgoing
+import process_btc_outgoing
 import generate_var
 
 import ctypes, signal
 
-logging.basicConfig(filename='../log/btcs.log',format='%(asctime)s:%(levelname)s:%(module)s:%(lineno)d:%(message)s', level=logging.DEBUG)
+#logging.basicConfig(filename='../ddlog/btcs.log',format='%(asctime)s:%(levelname)s:%(module)s:%(lineno)d:%(message)s', level=logging.DEBUG)
+#logging.basicConfig(level=logging.DEBUG,
+#                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
+#                    datefmt='%m-%d %H:%M',
+#                    filename='/temp/myapp.log',
+#                    filemode='w')
+
+logger = logging.getLogger('')
+
+logger.setLevel(logging.DEBUG)
+handler = logging.handlers.RotatingFileHandler(
+              '../log/btcs.log', maxBytes=50000, backupCount=15)
+handler.setFormatter(logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s'))
+logger.addHandler(handler)
+logger.addHandler(logging.StreamHandler())
 
 libc = ctypes.cdll.LoadLibrary("libc.so.6")
 
