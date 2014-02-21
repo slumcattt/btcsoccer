@@ -26,11 +26,8 @@ MIN_BET  = Decimal('0.002')
 MAX_BET  = Decimal('10')
 
 RETURN_FEE = Decimal('0.0001')
-WIN_FEE_PER_KB = Decimal('0.0001')
-ROUND_WINS = Decimal('0.000001')
 
 BTCS_FEE = Decimal('0.03')
-BTCS_FEE_ADDRESS = '1FH21q37yFpzvd5mdWckeyvqwTY96day8E'
 
 def path(sub, id):
     return '../data/%s/%s' % (sub, str(id))

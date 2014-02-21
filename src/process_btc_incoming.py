@@ -13,6 +13,7 @@ import wallet
 def process_incoming(betslip):
 
     recv = wallet.getreceivedby(betslip, 0)
+
     if recv == 0:
         logging.info('Betslip %s: Nothing received' % (betslip))
         return

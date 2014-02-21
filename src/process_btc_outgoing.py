@@ -5,43 +5,123 @@ import sys
 import os
 from decimal import Decimal
 import simplejson as json
+import datetime
 
+import dateutil.parser
 import btcs
 import logging
 
 import wallet
 
-def process_outgoing(gameid):
+DRYRUN = True
 
-    logging.info('Processing game ' + gameid)
+def within_deadline(game, bet):
+    bettime  = datetime.datetime.fromtimestamp(bet['latesttx']['time'], dateutil.tz.tzutc())
+    gametime = dateutil.parser.parse(game['date'])
+
+    logging.info('bet=%s, game=%s', repr(bettime), repr(gametime))
+
+    return bettime < gametime
+
+def sum_bets(bets):
+    return sum(Decimal(bet['amount']) for bet in bets)
+
+
+def payout(bets, total):
+    " payout the amount of total divided over bets "
+
+    divider = sum_bets(bets)
+    outputs = {}
+
+    for bet in bets:
+        amount = Decimal(bet['amount']) / divider * total
+
+        # could be double, then add
+        if bet['return_address'] in outputs:
+            amount = amount + outputs[bet['return_address']] 
+
+        outputs[bet['return_address']] = amount
+
+    logging.info('Paying: %s', repr(outputs))
+    if not DRYRUN:
+        wallet.payout(outputs)
+
+def process_outgoing(gameid):
 
     # read betslip
     with open(btcs.path('games/finished', gameid),'r') as f:
         game = json.loads(f.read())
     
+    if game['time'] in ['Abandonded', 'Postponed']:
+        result = game['time'] # this will result in everyone is wrong
+    else:
+        result = game['result']
+
+    logging.info('Processing game %s; Result is %s', gameid, result)
 
     # collect all bets for this game
-    for betid in os.listdir(btcs.path('bets/received', '')):
-        with open(btcs.path('bets/received', betid),'r') as f:
+    correctbet = []
+    wrongbet   = []
+    invalidbet = []
+
+    for betslipid in os.listdir(btcs.path('bets/received', '')):
+        with open(btcs.path('bets/received', betslipid),'r') as f:
             betslip = json.loads(f.read())
 
-        for bet in betslip['bets']:
-            if bet['game'] == gameid:
-                logging.info('processing bets: %s', repr(bet))
+        gamebets = [bet for bet in betslip['bets'] if bet['game'] == gameid]
+
+        if not gamebets:
+            continue
+
+        # find the latest transaction for this slip
+        tx = wallet.getlatesttx(betslipid)
+
+        # add latest transaction and return_address to bets
+        for bet in gamebets:
+            bet['latesttx'] = tx
+            if 'return_address' in betslip:
+                bet['return_address'] = betslip['return_address']
+            else:
+                bet['return_address'] = wallet.findreturnaddress(tx)
 
 
-        
+        if within_deadline(game, bet):
+            if bet['result'] == result:
+                correctbet.append(bet)
+            else:
+                wrongbet.append(bet)
+        else:
+            invalidbet.append(bet)
+
     # move to process for atomicity
-    #os.rename(btcs.path('games/finished', gameid),
-    #        btcs.path('games/process', gameid))
+    if not DRYRUN:
+        os.rename(btcs.path('games/finished', gameid),
+            btcs.path('games/process', gameid))
+
+    # process payouts
+    if invalidbet:
+        logging.info('Invalid: ' + repr(invalidbet))
+
+        payout(invalidbet, sum_bets(invalidbet))
+
+    if len(correctbet) >0:
+        logging.info('Correct: ' + repr(correctbet))
+        logging.info('Wrong  : ' + repr(wrongbet))
+
+        total = sum_bets(wrongbets) * (Decimal('1') - btcs.BTCS_FEE) + sum_bets(correctbet)
+        payout(correctbet, total )
+
+    elif len(wrongbet) > 0:
+        logging.info('Only wrong bets: ' + repr(correctbet))
+
+        payout(wrongbet, sum_bets(wrongbet))
 
 
+    
 
-
-
-
-    #os.rename(btcs.path('games/process', gameid),
-    #        btcs.path('games/archive', gameid))
+    if not DRYRUN:
+        os.rename(btcs.path('games/process', gameid),
+            btcs.path('games/archive', gameid))
 
 
 
