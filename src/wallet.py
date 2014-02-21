@@ -14,11 +14,11 @@ def getaddress(accountid):
 def getreceivedby(address, minconf):
     return bitcoind.getreceivedbyaddress(address, minconf)
 
-def getlatesttx(betslipid):
-    account = bitcoind.getaccount(betslipid)
+def getlatesttx(address):
+    account = bitcoind.getaccount(address)
     for n in range(0, 1000, 10):
         txs = bitcoind.listtransactions(account, 10, n)
-        tx = filter(lambda tx: tx['address'] == betslipid, txs)
+        tx = [t for t in txs if t.get('address') == address]
         if tx:
             return tx[0]
 
@@ -30,6 +30,7 @@ def findreturnaddress(tx):
     # grab first input
     previous_raw_tx  = bitcoind.decoderawtransaction(
             bitcoind.getrawtransaction(raw_tx['vin'][0]['txid']))
+
     
     vout  = previous_raw_tx['vout'] \
         [raw_tx['vin'][0]['vout']] 
@@ -39,7 +40,12 @@ def findreturnaddress(tx):
     return return_address
 
 def payout(outputs):
-    bitcoind.sendmany(outputs)
+    bitcoind.sendmany('dispatch', outputs)
+
+def movetodispatch(address, amount):
+    account = bitcoind.getaccount(address)
+    bitcoind.move(account, 'dispatch', amount)
+
 
 if __name__ == '__main__':
     print(bitcoind.getinfo())

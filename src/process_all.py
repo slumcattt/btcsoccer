@@ -23,7 +23,7 @@ while True:
 
     load_games.get_matches()
     process_btc_incoming.process_incoming_all()
-    # process_btc_outgoing.process_outgoing_all()  
+    process_btc_outgoing.process_outgoing_all()  
     generate_var.generate_pub()
 
     libc.sigrelse(signal.SIGKILL)

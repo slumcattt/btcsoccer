@@ -19,7 +19,8 @@ def within_deadline(game, bet):
     bettime  = datetime.datetime.fromtimestamp(bet['latesttx']['time'], dateutil.tz.tzutc())
     gametime = dateutil.parser.parse(game['date'])
 
-    logging.info('bet=%s, game=%s', repr(bettime), repr(gametime))
+    if bettime >= gametime:
+        logging.warning('Bet overdue: %s (game=%s)' % (repr(bet), repr(game)))
 
     return bettime < gametime
 
@@ -41,6 +42,11 @@ def payout(bets, total):
             amount = amount + outputs[bet['return_address']] 
 
         outputs[bet['return_address']] = amount
+
+    # from mbtc to btcs and make them floats
+    for o in outputs:
+        outputs[o] = outputs[o] / Decimal(1000)
+
 
     logging.info('Paying: %s', repr(outputs))
     if not DRYRUN:
@@ -75,6 +81,7 @@ def process_outgoing(gameid):
 
         # find the latest transaction for this slip
         tx = wallet.getlatesttx(betslipid)
+        logging.info('TX = %s' % repr(tx))
 
         # add latest transaction and return_address to bets
         for bet in gamebets:
@@ -84,7 +91,6 @@ def process_outgoing(gameid):
             else:
                 bet['return_address'] = wallet.findreturnaddress(tx)
 
-
         if within_deadline(game, bet):
             if bet['result'] == result:
                 correctbet.append(bet)
@@ -93,10 +99,13 @@ def process_outgoing(gameid):
         else:
             invalidbet.append(bet)
 
+        wallet.movetodispatch(betslipid, Decimal(bet['amount']))
+
     # move to process for atomicity
     if not DRYRUN:
         os.rename(btcs.path('games/finished', gameid),
             btcs.path('games/process', gameid))
+
 
     # process payouts
     if invalidbet:

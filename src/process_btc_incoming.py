@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+# script will check if money is payed on pending betslips and will move the betslips accordingly
+
 
 import sys, os, logging
 from decimal import Decimal
@@ -37,7 +39,6 @@ def process_incoming(betslip):
     else:
         logging.warning('Betslip %s: Invalid amount received: %s, expected %s' % (betslip, recv, total))
         logging.warning('Return amount manually')
-
     
 
 
