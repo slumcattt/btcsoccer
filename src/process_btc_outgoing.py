@@ -91,15 +91,15 @@ def process_outgoing(gameid):
             else:
                 bet['return_address'] = wallet.findreturnaddress(tx)
 
-        if within_deadline(game, bet):
-            if bet['result'] == result:
-                correctbet.append(bet)
+            if within_deadline(game, bet):
+                if bet['result'] == result:
+                    correctbet.append(bet)
+                else:
+                    wrongbet.append(bet)
             else:
-                wrongbet.append(bet)
-        else:
-            invalidbet.append(bet)
+                invalidbet.append(bet)
 
-        wallet.movetodispatch(betslipid, Decimal(bet['amount']))
+            wallet.movetodispatch(betslipid, Decimal(bet['amount']))
 
     # move to process for atomicity
     if not DRYRUN:
@@ -117,7 +117,8 @@ def process_outgoing(gameid):
         logging.info('Correct: ' + repr(correctbet))
         logging.info('Wrong  : ' + repr(wrongbet))
 
-        total = sum_bets(wrongbets) * (Decimal('1') - btcs.BTCS_FEE) + sum_bets(correctbet)
+        total = sum_bets(wrongbet) * (Decimal('1') - btcs.BTCS_FEE) + sum_bets(correctbet)
+        logging.info('Total wrong %s, total correct %s payout %s' % (repr(sum_bets(wrongbet)), repr(sum_bets(correctbet)), repr(total)))
         payout(correctbet, total )
 
     elif len(wrongbet) > 0:
