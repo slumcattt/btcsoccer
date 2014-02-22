@@ -11,18 +11,12 @@ import generate_var
 
 import ctypes, signal
 
-#logging.basicConfig(filename='../ddlog/btcs.log',format='%(asctime)s:%(levelname)s:%(module)s:%(lineno)d:%(message)s', level=logging.DEBUG)
-#logging.basicConfig(level=logging.DEBUG,
-#                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-#                    datefmt='%m-%d %H:%M',
-#                    filename='/temp/myapp.log',
-#                    filemode='w')
 
+#setup logging
 logger = logging.getLogger('')
-
 logger.setLevel(logging.DEBUG)
-handler = logging.handlers.RotatingFileHandler(
-              '../log/btcs.log', maxBytes=50000, backupCount=15)
+handler = logging.handlers.TimedRotatingFileHandler(
+        '../log/btcs.log', when="midnight")
 handler.setFormatter(logging.Formatter('%(asctime)s %(name)-12s %(levelname)-8s %(message)s'))
 logger.addHandler(handler)
 logger.addHandler(logging.StreamHandler())
@@ -31,6 +25,7 @@ libc = ctypes.cdll.LoadLibrary("libc.so.6")
 
 while True:
 
+    # turn off signals during processing
     libc.sighold(signal.SIGKILL)
     libc.sighold(signal.SIGTERM)
     libc.sighold(signal.SIGINT)
