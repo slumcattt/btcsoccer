@@ -34,21 +34,22 @@ def generate_pub():
             in  os.listdir(btcs.path('games/new', ''))}
 
 
-    files = os.listdir(btcs.path('bets/received', '')) 
-    slips = [ json.loads(open(btcs.path('bets/received',slip),'r').read()) 
-            for slip 
-            in files]
+    slipids = os.listdir(btcs.path('bets/received', '')) 
+    slips = { slipid: json.loads(open(btcs.path('bets/received',slipid),'r').read()) 
+            for slipid 
+            in slipids}
 
 
     for gameid, game in games.iteritems():
 
+        # game result in a format suitable for template rendering
         game['results'] = [ { "away": a, "cols": [ {
                 "score": 0 
             } for h in range(6) ] } for a in range(6) ]
 
         # sum all results found in bets
 
-        for slip in slips:
+        for slip in slips.values():
             for bet in slip['bets']:
                 if bet['game'] == gameid:
                     h,a = bet['result'].split('-')
@@ -63,19 +64,21 @@ def generate_pub():
 
     # walk again through slips to generate account info
     accounts = {}
-    for slip in slips:
+    for slipid in slips:
+        slip = slips[slipid]
         if not slip['accountid'] in accounts:
-            accounts[slip['accountid']] = {}
+            accounts[slip['accountid']] = { 'slips': [] }
         for bet in slip['bets']:
             if not bet['game'] in accounts[slip['accountid']]:
                 accounts[slip['accountid']][bet['game']] = []
 
             accounts[slip['accountid']][bet['game']].append(bet)
 
+        accounts[slip['accountid']]['slips'].append(slipid)
+
 
     for (accountid, account) in accounts.iteritems():
-        with open(btcs.path('var', accountid), 'w') as f:
-            f.write(json.dumps(account, sort_keys=True, indent=4, separators=(',', ': ')))
+        btcs.writejson(btcs.path('var', accountid), account)
 
     games = sorted(games.values(), key=lambda game: game['date'])
 

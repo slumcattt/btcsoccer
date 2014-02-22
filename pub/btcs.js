@@ -1,6 +1,7 @@
 
 /* main js */
 var update_games_interval = 5000;
+var update_check_payment_interval = 800;
 var default_amount        = 2;
 var max_amount            = 100;
 
@@ -120,9 +121,12 @@ function saveBetslip() {
 
         }
     }
-    // generate sum
+    // generate total
     total = (total/1000).toFixed(3);
+
     console.log(slip, total);
+    delete window.active_betslip;
+
     $.ajax({
         url: 'create-betslip',
         type: 'post',
@@ -135,6 +139,8 @@ function saveBetslip() {
             $('#checkout').empty();
             $('#checkout').append('<img src="'+img + '">');
             $('#checkout').append('<a href="' +uri +'">pay here</a>');
+
+            window.active_betslip = data;
          }
     });
 
@@ -163,9 +169,43 @@ function loadGames() {
         }
         markBetslipBets();
 
-        window.setTimeout(loadGames, update_games_interval);
+        window.setTimeout(loadAccount, 10);
     });
 }
+
+function loadAccount() {
+    if (localStorage.accountid)
+    {   
+        $.getJSON('var/' + localStorage.accountid, undefined, function(data) {
+            
+            console.log('got ', data);
+            
+            if (window.active_betslip 
+                && data.slips.indexOf(window.active_betslip) > -1)
+             {
+                
+                // clear betslip
+                for(var k in localStorage)
+                    if (/^game-/.test(k))
+                        localStorage.removeItem(k);
+
+                markBetslipBets();
+
+                loadTab('#games');
+
+            }
+            // 
+        });
+    }
+        
+
+    if (location.hash == '#checkout')
+        window.setTimeout(loadAccount, update_check_payment_interval);
+    else
+        window.setTimeout(loadGames, update_games_interval);
+}
+
+
 $(function() {
     loadGames();
 });
