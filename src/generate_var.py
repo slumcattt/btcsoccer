@@ -84,14 +84,7 @@ def generate_pub():
 
     # walk through games to generate data for templates
     for game in games:
-        if game['time'][:1].isdigit():
-            tm = int(game['time'][:-1])
-            if tm >0 and tm < 46:
-                game['status'] = '1st half'
-            else:
-                game['status'] = '2nd half'
-        else:
-            game['status'] = game['time']
+        game['status'] = game['time']
 
         if 'result' in game:
             (game['home_score'], game['away_score']) = game['result'].split('-')
@@ -109,7 +102,6 @@ def generate_pub():
     today = [ game for game in games if game['date'] >= maxtime_live and game['date'] < maxtime_today]
     later = [ game for game in games if game['date'] >= maxtime_today]
 
-    later = later[:10]
 
     alldata = { 'games': { 'live': live, 'today': today, 'later': later } }
     

@@ -23,6 +23,10 @@ import urllib2, re
 import logging
 
 import btcs
+
+INTERVAL_ALL_GAMES  = 60 * 6
+INTERVAL_LIVE_GAMES = 30
+
 def get_matches():
     """Grabs match data from server, processes the results and returns match objects"""
 
@@ -33,18 +37,22 @@ def get_matches():
     
     match_file = btcs.path('cache', 'matches.xml')
 
-    if os.path.exists(match_file) and (time.time() - os.path.getmtime(match_file) < 60 * 10):
-        logging.info('Reading matchcache from %s' % match_file)
-        with open(match_file, 'r') as f:
-            matches_data = f.read()
-        used_cache = True
-    else:
-        logging.info('Reading from %s ' % url)
+    if (not os.path.exists(match_file)) or (time.time() - os.path.getmtime(match_file) > INTERVAL_ALL_GAMES):
+        logging.info('Reading full game data from %s ' % url)
+
+        matches_data = urllib2.urlopen(url).read()
+        process_xml(matches_data, match_file)
+
+
+    url   = "%s/GetLiveScore?apikey=%s" % (btcs.SOCCER_URL, btcs.SOCCER_KEY)
+    match_file = btcs.path('cache', 'matches_live.xml')
+    if (not os.path.exists(match_file)) or (time.time() - os.path.getmtime(match_file) > INTERVAL_LIVE_GAMES):
+        logging.info('Reading live game data from %s ' % url)
         matches_data = urllib2.urlopen(url).read()
 
-        logging.info('Read data (%d bytes)' % len(matches_data))
-        used_cache = False
+        process_xml(matches_data, match_file)
 
+def process_xml(matches_data, match_file):
     
     matches_xml  = ElementTree.fromstring(matches_data)
 
@@ -52,30 +60,41 @@ def get_matches():
         raise Exception('No matches returned; data read: %s' % matches_data)
 
     # cache results
-    if not used_cache:
-        with open(match_file, 'w') as f:
-            f.write(matches_data)
+    with open(match_file, 'w') as f:
+        f.write(matches_data)
 
     new, updated, finished = 0, 0, 0
 
     matches = []
     for xml in matches_xml.findall('Match'):
-        match = { 
-                'id':      xml.find('Id').text,
-                'home_id': xml.find('HomeTeam_Id').text ,
-                'away_id': xml.find('AwayTeam_Id').text ,
-                'home':    xml.find('HomeTeam').text ,
-                'away':    xml.find('AwayTeam').text ,
-                'league':  xml.find('League').text,
-                'time':    '' if xml.find('Time') is None else xml.find('Time').text
-        }
+        try:
+            match = { 
+                    'id':      xml.find('Id').text,
+                    'home_id': xml.find('HomeTeam_Id').text ,
+                    'away_id': xml.find('AwayTeam_Id').text ,
+                    'league':  xml.find('League').text,
+                    'time':    '' if xml.find('Time') is None else xml.find('Time').text
+            }
 
-        if not xml.find('HomeGoals') is None:
-            match['result'] = xml.find('HomeGoals').text + '-' + xml.find('AwayGoals').text
+            if xml.find('HomeTeam') is None:
+                match['home'] = xml.find('Hometeam').text
+            else:
+                match['home'] = xml.find('HomeTeam').text
 
-        localtime = xml.find('Date').text
-        match['date'] = dateutil.parser.parse(localtime).astimezone(dateutil.tz.tzutc()).isoformat()
+            if xml.find('AwayTeam') is None:
+                match['away'] = xml.find('Awayteam').text
+            else:
+                match['away'] = xml.find('AwayTeam').text
 
+            if not xml.find('HomeGoals') is None:
+                match['result'] = xml.find('HomeGoals').text + '-' + xml.find('AwayGoals').text
+
+            localtime = xml.find('Date').text
+            match['date'] = dateutil.parser.parse(localtime).astimezone(dateutil.tz.tzutc()).isoformat()
+
+        except:
+            logging.error('Error processing game # %s in file %s' % (xml.find('Id').text, match_file))
+            raise
         matchid = int(match['id'])
 
         if not match['league'] in btcs.LEAGUES:

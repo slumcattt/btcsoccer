@@ -18,8 +18,8 @@ BITCOIND       = "http://bitcoinrpc:Am8eCsFJpvYqqbRaMVMJxMPP2tPczsFwD131iiKh68iM
 
 ACCOUNT_PREFIX = "r"
 MAX_SCORE      = 5
-MAX_DAYS_BEFORE   = 20
-MAX_DAYS_AFTER    = 25
+MAX_DAYS_BEFORE   = 3
+MAX_DAYS_AFTER    = 6
 DEADLINE_MINS = 10
 
 MIN_BET  = Decimal('0.002')

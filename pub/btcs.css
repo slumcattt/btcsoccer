@@ -158,10 +158,11 @@ table.bets { width: 100%; Xmax-width: 500px; color:#ebecf0; font-weight:500;}
 table.bets td { width: 15%; height: 5em; background-color: #6fa9e4; border: 1px #565656 solid;text-align: center; font-size: .6em;} 
 table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656 solid;border-right: 1px #565656 solid;  text-align: center; }
 
+table.bets td.mybet { background-color: #fff568; color: #565656;}
 /* upper-left corner */
 table.bets tr:nth-child(1) th:nth-child(1) { background-color: #ffb54b; border-top: 1px #ffb54b solid;}
 
-table.bets td.selected { background-color: #ffb54b; }
+table.bets td.selected { background-color: #ffb54b; color: #565656;}
 
 table.stakes {
 	position: absolute;

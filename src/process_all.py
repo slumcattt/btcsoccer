@@ -31,17 +31,21 @@ while True:
     libc.sighold(signal.SIGINT)
     libc.sighold(signal.SIGHUP)
 
-    load_games.get_matches()
-    process_btc_incoming.process_incoming_all()
-    process_btc_outgoing.process_outgoing_all()  
-    generate_var.generate_pub()
+    try:
+        load_games.get_matches()
+        process_btc_incoming.process_incoming_all()
+        process_btc_outgoing.process_outgoing_all()  
+        generate_var.generate_pub()
+    except Exception, e:
+        logging.exception('Error during btcs processing')
+        raise e
 
     libc.sigrelse(signal.SIGKILL)
     libc.sigrelse(signal.SIGTERM)
     libc.sigrelse(signal.SIGINT)
     libc.sigrelse(signal.SIGHUP)
 
-    time.sleep(15)
+    time.sleep(5)
 
 
 
