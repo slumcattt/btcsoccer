@@ -37,14 +37,13 @@ def get_matches():
         logging.info('Reading matchcache from %s' % match_file)
         with open(match_file, 'r') as f:
             matches_data = f.read()
+        used_cache = True
     else:
         logging.info('Reading from %s ' % url)
         matches_data = urllib2.urlopen(url).read()
 
         logging.info('Read data (%d bytes)' % len(matches_data))
-        # cache results
-        with open(match_file, 'w') as f:
-            f.write(matches_data)
+        used_cache = False
 
     
     matches_xml  = ElementTree.fromstring(matches_data)
@@ -52,6 +51,10 @@ def get_matches():
     if matches_xml.find('Match') is None:
         raise Exception('No matches returned; data read: %s' % matches_data)
 
+    # cache results
+    if not used_cache:
+        with open(match_file, 'w') as f:
+            f.write(matches_data)
 
     new, updated, finished = 0, 0, 0
 

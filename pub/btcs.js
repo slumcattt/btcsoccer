@@ -1,6 +1,6 @@
 
 /* main js */
-var update_games_interval = 250000;
+var update_games_interval = 5000;
 var default_amount        = 2;
 var max_amount            = 100;
 
