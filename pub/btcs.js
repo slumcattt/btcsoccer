@@ -40,13 +40,30 @@ function loadTab(tab, force) {
       window.faqloaded = true;
    }
 
-   else if (tab == '#chat' & !window.chatloaded)
+   else if (tab == '#chats' & !window.chatloaded)
    {
-      $('#faq').load('faq.html');
       window.chatloaded = true;
+      /*
       $('#chat').html('<iframe id="shoutmix_b6c3a6" src="http://sht.mx/b6c3a6"'
           +' width="240" height="480" frameborder="0" scrolling="auto">'
           +'<a href="http://sht.mx/b6c3a6">ShoutMix Live Chat</a></iframe>');
+          */
+      var chatRef = new Firebase('https://btcsoccer.firebaseio.com/chat');
+      var chat = new FirechatUI(chatRef, document.getElementById("chats"));
+      var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
+          if (err) {
+              // an error occurred while attempting login
+              console.log(error);
+          } else if (user) {
+            chat.setUser(user.id, 'Anonymous' + user.id.substr(0, 8));
+            setTimeout(function() {
+              chat._chat.enterRoom('-JGYccP5ofsEswAsODAB');
+            }, 500);
+          } else {
+            simpleLogin.login('anonymous');    
+          }
+      });
+      //chat.setUser('user-' + getAccountId(), 'user-'+getAccountId());
    }
 
    else if (tab == '#betslip')
