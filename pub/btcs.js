@@ -55,12 +55,15 @@ function loadTab(tab, force) {
               // an error occurred while attempting login
               console.log(error);
           } else if (user) {
-            chat.setUser(user.id, 'Anonymous' + user.id.substr(0, 8));
+            console.log('logging in user', user);
+            chat.setUser(user.id, 'Anonymous' + getAccountId());
+            /*
             setTimeout(function() {
               chat._chat.enterRoom('-JGYccP5ofsEswAsODAB');
-            }, 500);
+            }, 500);*/
           } else {
-            simpleLogin.login('anonymous');    
+            console.log('logging in user', user);
+            //simpleLogin.login('anonymous');    
           }
       });
       //chat.setUser('user-' + getAccountId(), 'user-'+getAccountId());
