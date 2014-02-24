@@ -1,0 +1,22 @@
+#!/bin/sh
+
+cd src
+
+if  ps aux | grep '[c]reate_betslip.py' 
+then 
+   echo 'Create_betslip already running'
+else 
+   echo 'Starting create_betslip ' 
+   nohup ./create_betslip.py &
+fi
+
+if  ps aux | grep '[p]rocess_all.py'
+then 
+   echo 'Process_all already running'
+else 
+   echo 'Starting process_all..' 
+   nohup ./process_all.py &
+fi
+
+cd ..
+

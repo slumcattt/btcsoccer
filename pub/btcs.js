@@ -1,6 +1,6 @@
 
 /* main js */
-var update_games_interval = 500000;
+var update_games_interval = 5000;
 var update_check_payment_interval = 800;
 var default_amount        = 2;
 var max_amount            = 100;
@@ -24,6 +24,8 @@ function loadTab(tab, force) {
 
     if ($('section'+tab).length == 0)
         return; // not a tab
+
+    $('#games li.selected').removeClass('selected');
 
     console.log('loading tab' + tab);
     $('body > section:visible').hide();
@@ -136,7 +138,7 @@ function saveBetslip() {
     $.ajax({
         url: 'create-betslip',
         type: 'post',
-        //dataType: 'json',
+        dataType: 'text',
         data: JSON.stringify(slip),
         contentType: "application/json",
         success: function(data) { 
@@ -170,7 +172,7 @@ function getLocaleShortDateString(d)
 function formatDate(iso) {
 
     var dt = new Date(iso);
-    return getLocaleShortDateString(dt) + ' ' + dt.toLocaleTimeString().substr(0,5);
+    return getLocaleShortDateString(dt) + '<br>' + dt.toLocaleTimeString().substr(0,5);
 }
 
 // load games from server
@@ -228,8 +230,8 @@ function setMyBets(bets)
             {
                 var fld = bet.result.split('-');
                 var $sel = $bettable.find('tr:eq(' + (parseInt(fld[1])+1) + ') td:eq(' + (parseInt(fld[0])) + ')');
-                console.log($bettable, $sel, $sel.text());
-                $sel.html(''+$sel.text().trim() + '<br/>' + bet.amount);
+                var org = $sel.html().trim().split('<br>');
+                $sel.html(org[0] + '<br>' + (parseInt(org[1]||0) + parseInt(bet.amount)));
                 console.log($bettable, $sel, $sel.html());
                 $sel.addClass('mybet');
             }

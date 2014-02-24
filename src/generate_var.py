@@ -103,6 +103,7 @@ def generate_pub():
     later = [ game for game in games if game['date'] >= maxtime_today]
 
 
+    later = later[:15]
     alldata = { 'games': { 'live': live, 'today': today, 'later': later } }
     
     render('games.html', alldata)

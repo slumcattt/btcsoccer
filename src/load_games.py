@@ -56,9 +56,6 @@ def process_xml(matches_data, match_file):
     
     matches_xml  = ElementTree.fromstring(matches_data)
 
-    if matches_xml.find('Match') is None:
-        raise Exception('No matches returned; data read: %s' % matches_data)
-
     # cache results
     with open(match_file, 'w') as f:
         f.write(matches_data)

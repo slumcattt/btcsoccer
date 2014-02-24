@@ -1,0 +1,15 @@
+#!/bin/sh
+
+echo 
+echo 'Problems'
+grep 'WARN\|ERROR' log/btcs.log
+
+echo 
+echo 'Running'
+ps aux | grep [p]ython
+echo 
+echo 'Logtail'
+
+tail -n 15 log/btcs.log
+
+

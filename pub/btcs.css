@@ -102,7 +102,6 @@ section { margin-top: 100px;clear: both; }
 section {color: #eee; }
 
 /* selected game, hover game */
-.games li .overview:hover,
 .games li.selected .overview { background-color: #ffb54b; }
 
 .games li { background-color: #3c3c3c; color: #ebecf0; border-top: 1px #565656 solid; margin-bottom:1px; }
@@ -166,7 +165,7 @@ table.bets td.selected { background-color: #ffb54b; color: #565656;}
 
 table.stakes {
 	position: absolute;
-	left: 80%;
+	left: 72%;
 	top: 12%;
 	width: 13%;
 	color: #ebecf0;
