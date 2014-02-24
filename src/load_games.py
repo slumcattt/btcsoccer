@@ -83,6 +83,11 @@ def process_xml(matches_data, match_file):
             else:
                 match['away'] = xml.find('AwayTeam').text
 
+            if not xml.find('HomeGoalDetails') is None:
+                match['home_goal_details'] = xml.find('HomeGoalDetails').text
+            if not xml.find('AwayGoalDetails') is None:
+                match['away_goal_details'] = xml.find('AwayGoalDetails').text
+
             if not xml.find('HomeGoals') is None:
                 match['result'] = xml.find('HomeGoals').text + '-' + xml.find('AwayGoals').text
 

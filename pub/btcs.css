@@ -47,7 +47,7 @@ header h1 #logo {
    margin: 5px -1px;
 }
 
-section h3 { margin: 15px 0 0 6px; font-size: 1em; font-weight: normal;padding: 3px;}
+section h3, section h4 { margin: 15px 0 0 6px; font-size: 1em; font-weight: normal;padding: 3px;}
 
 header {
    background-color: #fff568;
@@ -150,8 +150,16 @@ section {color: #eee; }
 .games li div.home {position:absolute; left: 7%; top: 10%; max-width: 40%; font-weight:300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left:10px;}
 .games li div.away {position:absolute; left: 7%; top: 55%; max-width: 40%; font-weight:300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left:10px; }
 
-table.bets { display: none; }
+table.bets, .live_details { display: none; }
 li.selected table.bets { display: table; }
+li.selected .live_details { display:block; }
+
+.live_details .details { position: relative;  background-color: #6fa9ee;}
+
+.games li .live_details div.home_score {left: 1%; top: 10%; font-weight:500; margin-left:10px;}
+.games li .live_details div.away_score {position:absolute; left: 1%; top: 55%; font-weight:500; margin-left:10px;}
+.games li .live_details div.home {position:absolute; left: 7%; top: 10%; max-width: 40%; font-weight:300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left:10px;}
+.games li .live_details div.away {position:absolute; left: 7%; top: 55%; max-width: 40%; font-weight:300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-left:10px; }
 
 table.bets { width: 100%; Xmax-width: 500px; color:#ebecf0; font-weight:500;}
 table.bets td { width: 15%; height: 5em; background-color: #6fa9e4; border: 1px #565656 solid;text-align: center; font-size: .6em;} 

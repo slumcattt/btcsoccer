@@ -29,16 +29,19 @@
 
                   
             </div>
-            <table class="bets">
-              <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
-              {{#results}}
-              <tr><th>{{away}} 
-                  {{#cols}}
-                      <td>{{score}}
-                  {{/cols}}
-              {{/results}}
+            <div class="live_details">
+              <h4>Live Game Details</h4>
+              <div class="details">
+              <div class="live">LIVE</div>
+              <div class="status">{{status}}</div>
+              <div class="home">{{home}}</div>
+              <div class="home_score">{{home_score}}</div>
+              <div class="away_score">{{away_score}}</div>
+              <div class="away">{{away}}</div>
+              <div class="home_goal_details">{{home_goal_details}}</div>
+              <div class="away_goal_details">{{away_goal_details}}</div>
 
-            </table>
+            </div>
 
         {{/live}}
         </ul>
