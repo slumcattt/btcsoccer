@@ -12,73 +12,80 @@
     <link rel="stylesheet" href="firechat/firechat-default.css">
     <link rel="shortcut icon" href="img/logo.png">
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js" ></script>
+    <script src="btcs.js"></script>
+
     <script src="https://cdn.firebase.com/v0/firebase.js"></script>
     <script src="https://cdn.firebase.com/v0/firebase-simple-login.js"></script>
     <script src="firechat/firechat-default.js"></script>
-    <script src="btcs.js"></script>
 
 
   </head>
   <body>
     <header>
-      <h1><span id="logo"></span></h1>
-      <nav>
-          <ul>
-            <li>Games</li>
-            <li>Chats</li>
-            <li>Stats</li>
-            <li>FAQ</li>
-          </ul>
-          <div class="back-btn button">&lt;&lt;</div>
-          <div class="betslip-btn button">
-            Bet Slip
-          </div>
-      </nav>
+      <div id="intro">
+      </div>
+      <div class="hdr">
+        <span id="logo"></span>
+        <div id="menu-btn"></div>
+
+        <ul id="nav">
+          <li><a href="#games">Games</a></li>
+          <li><a href="#chats">Chats</a></li>
+          <li><a href="#stats">Stats</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="back-btn button">&lt;&lt;</div>
+      <div class="betslip-btn button">
+        Bet Slip
+      </div>
 
     </header>
-
-    <section id="games">
-      <div id="gamelist">
-      </div>
-        
-    </section>
-    <section id="betslip">
-        <ul class="games">
-        </ul>
-        <div>
-          <div class="total-wager"><span>My Total Wager: </span><span class="v">...</span></div>
-          <div class="total-win"><span>My Maximum Win: </span><span class="v">...</span></div>
-          <input class="return-address" placeholder="Paste your bitcoin return address">
-          <div class="return-address-info">If no return address is given, bitcoins will be paid to to the sender</div>
-            
-          <div class="continue-btn button">Continue Betting
-          </div><div class="checkout-btn button">Checkout Bets</div>
+    <div id="content">
+      <section id="games">
+        <div id="gamelist">
         </div>
+          
+      </section>
+      <section id="betslip">
+          <ul class="games">
+          </ul>
+          <div>
+            <div class="total-wager"><span>My Total Wager: </span><span class="v">...</span></div>
+            <div class="total-win"><span>My Maximum Win: </span><span class="v">...</span></div>
+            <input class="return-address" placeholder="Paste your bitcoin return address">
+            <div class="return-address-info">If no return address is given, bitcoins will be paid to to the sender</div>
+              
+            <div class="continue-btn button">Continue Betting
+            </div><div class="checkout-btn button">Checkout Bets</div>
+          </div>
 
-    </section>
+      </section>
 
-    <section id="checkout">
-        Creating QR code...
+      <section id="checkout">
+          Creating QR code...
 
-    </section>
+      </section>
 
-    <section id="chats">
-      Chat loading...
-    </section>
+      <section id="chats">
+        Chat loading...
+      </section>
 
-    <section id="mybets">
-      my bets
-    </section>
+      <section id="mybets">
+        my bets
+      </section>
 
-    <section id="stats">
-      stats
-    </section>
+      <section id="stats">
+        stats
+      </section>
 
-    <section id="faq">
-    </section>
+      <section id="faq">
+      </section>
+    </div>
     <script src="//static.getclicky.com/js" type="text/javascript"></script>
     <script type="text/javascript">try{ clicky.init(100711121); }catch(e){}</script>
     <noscript><p><img alt="Clicky" width="1" height="1" src="//in.getclicky.com/100711121ns.gif" /></p></noscript>
+
   </body>
 </html>
 

@@ -47,6 +47,8 @@ def generate_pub():
                 "score": 0 
             } for h in range(6) ] } for a in range(6) ]
 
+        game['total'] = 0
+
         # sum all results found in bets
 
         for slip in slips.values():
@@ -58,7 +60,7 @@ def generate_pub():
                     am = int(Decimal(bet['amount']))
                     game['results'][a]['cols'][h]['score'] = (
                         game['results'][a]['cols'][h]['score'] + am)
-                    game['total'] = game.get('total', 0) + am
+                    game['total'] = game['total'] + am
                     
 
 

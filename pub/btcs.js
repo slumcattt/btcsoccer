@@ -1,19 +1,31 @@
 
 /* main js */
-var update_games_interval = 5000;
+var update_games_interval = 500000;
 var update_check_payment_interval = 800;
 var default_amount        = 2;
 var max_amount            = 100;
 
 
 
-/**********************
- * Navigation *
- **********************/
 
+/* delayed load */
 $(function() {
-    window.location.hash = '';
-})
+   $('#faq').load('faq.html');
+
+   var chatRef = new Firebase('https://btcsoccer.firebaseio.com/chat');
+   var chat = new FirechatUI(chatRef, document.getElementById("chats"));
+   var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
+       if (err) {
+           // an error occurred while attempting login
+           console.log(error);
+       } else if (user) {
+         console.log('CHAT: logging in user', user);
+         chat.setUser(user.id, 'Anonymous' + getAccountId());
+       } else {
+         console.log('CHAT: not logging in user', user);
+       }
+   });
+});
 
 function loadTab(tab, force) {
     if ($('section'+tab).is(':visible') && !force)
@@ -36,36 +48,12 @@ function loadTab(tab, force) {
 
    if (tab == '#faq' && !window.faqloaded)
    {
-      $('#faq').load('faq.html');
       window.faqloaded = true;
    }
 
    else if (tab == '#chats' & !window.chatloaded)
    {
       window.chatloaded = true;
-      /*
-      $('#chat').html('<iframe id="shoutmix_b6c3a6" src="http://sht.mx/b6c3a6"'
-          +' width="240" height="480" frameborder="0" scrolling="auto">'
-          +'<a href="http://sht.mx/b6c3a6">ShoutMix Live Chat</a></iframe>');
-          */
-      var chatRef = new Firebase('https://btcsoccer.firebaseio.com/chat');
-      var chat = new FirechatUI(chatRef, document.getElementById("chats"));
-      var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
-          if (err) {
-              // an error occurred while attempting login
-              console.log(error);
-          } else if (user) {
-            console.log('logging in user', user);
-            chat.setUser(user.id, 'Anonymous' + getAccountId());
-            /*
-            setTimeout(function() {
-              chat._chat.enterRoom('-JGYccP5ofsEswAsODAB');
-            }, 500);*/
-          } else {
-            console.log('logging in user', user);
-            //simpleLogin.login('anonymous');    
-          }
-      });
       //chat.setUser('user-' + getAccountId(), 'user-'+getAccountId());
    }
 
@@ -88,6 +76,7 @@ function loadTab(tab, force) {
 }
 
 $(function() {
+   /*
     $('nav li, .betslip-btn').on('click', function() {
         //alert($(this).text());
         var tab = '#' + $(this).text().trim().toLowerCase().replace(' ','');
@@ -95,13 +84,28 @@ $(function() {
     });
 
     $('.back-btn, .continue-btn').on('click', function() { loadTab('#games'); });
-    $('.checkout-btn').on('click', function() { loadTab('#checkout'); });
+    */
+    $('#menu-btn').on('click', function() { $('header').toggleClass('menu-active'); });
+
+    $('.betslip-btn').on('click', function() { 
+        $('section:not(#betslip):not(#checkout)').toggle();
+        $('#betslip').toggle(); 
+        if ($('#betslip').is(':visible'))
+          showBets();
+    });
+
+    $('.checkout-btn').on('click', function() { 
+        $('#betslip').toggle(); 
+        $('#checkout').toggle(); 
+    
+    });
 });
 
 
 
         
 // menu navigation
+/*
 $(function() {
     
     $(window).bind( 'hashchange', function(e) {
@@ -111,7 +115,7 @@ $(function() {
     });
     loadTab('#games', true);
 });
-
+*/
 function getAccountId()
 {
     if (!localStorage['accountid'])
@@ -451,7 +455,6 @@ $(function() {
         localStorage[inp.attr('data-storage')] = inp.val();
     }
 
-
 });
 
 // selecting results
@@ -490,6 +493,13 @@ var navbarHeight = $('header').outerHeight();
 
 $(window).scroll(function(event){
     didScroll = true;
+    $('header').toggleClass('menu-active', false); 
+
+    if ($(window).scrollTop() > (.8 * $(window).height()))
+        console.log('below');
+    else
+        console.log('above');
+    $('header').toggleClass('below', $(window).scrollTop() > ($(window).height()-70));
 });
 
 setInterval(function() {
@@ -526,3 +536,35 @@ function hasScrolled() {
     lastScrollTop = st;
 }
 
+function isSmartPhone() {
+    return $(window).width() <= 600;
+}
+/* Make a links smooth-scroll */
+$(function() {
+  $('a[href^="#"]').on('click',function (e) {
+      
+        e.preventDefault();
+        $('header').removeClass('nav-up').addClass('nav-down');
+        $('header').toggleClass('menu-active', false); 
+
+        var target = this.hash,
+        $target = $(target);
+        var target_top = $target.offset().top;
+        console.log('scrolling to ' , $target, target_top, $('header .hdr').height(), $('#intro').height());
+        /*
+        if (target == '#games' && isSmartPhone())
+          target_top = 0;
+        console.log('scrolling to ' , $target, target_top);
+        */
+
+        if (!isSmartPhone()) 
+            target_top -= $('header .hdr').height();
+
+        $('html, body').stop().animate({
+            'scrollTop': target_top
+        }, 200, 'swing', function () {
+            //window.location.hash = target;
+        });
+        return false;
+    });
+});
