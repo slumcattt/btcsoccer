@@ -13,7 +13,8 @@ folders = [
     'data/bets/new',
     'data/bets/received',
     'data/bets/archive',
-    'data/cache',
+    'data/input',
+    'data/tx',
     'data/pub']
 
 for folder in folders:

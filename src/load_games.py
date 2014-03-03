@@ -27,6 +27,19 @@ import btcs
 INTERVAL_ALL_GAMES  = 60 * 6
 INTERVAL_LIVE_GAMES = 30
 
+
+def load_from_xmlsoccer(url, match_file):
+    logging.info('Reading %s game data from %s ' % (match_file, url))
+
+    try:
+        matches_data = urllib2.urlopen(url).read()
+    except urllib2.HTTPError:
+        logging.error('Error processing %s' % url);
+        logging.exception('HTTP Error occured, ignoring')
+    else:
+        process_xml(matches_data, match_file)
+
+
 def get_matches():
     """Grabs match data from server, processes the results and returns match objects"""
 
@@ -35,22 +48,16 @@ def get_matches():
     url   = "%s/GetFixturesByDateInterval?apikey=%s&startDateString=%s&endDateString=%s" \
             % (btcs.SOCCER_URL, btcs.SOCCER_KEY, start, end)
     
-    match_file = btcs.path('cache', 'matches.xml')
+    match_file = btcs.path('input', 'matches.xml')
 
     if (not os.path.exists(match_file)) or (time.time() - os.path.getmtime(match_file) > INTERVAL_ALL_GAMES):
-        logging.info('Reading full game data from %s ' % url)
-
-        matches_data = urllib2.urlopen(url).read()
-        process_xml(matches_data, match_file)
+        load_from_xmlsoccer(url, match_file)
 
 
     url   = "%s/GetLiveScore?apikey=%s" % (btcs.SOCCER_URL, btcs.SOCCER_KEY)
-    match_file = btcs.path('cache', 'matches_live.xml')
+    match_file = btcs.path('input', 'matches_live.xml')
     if (not os.path.exists(match_file)) or (time.time() - os.path.getmtime(match_file) > INTERVAL_LIVE_GAMES):
-        logging.info('Reading live game data from %s ' % url)
-        matches_data = urllib2.urlopen(url).read()
-
-        process_xml(matches_data, match_file)
+        load_from_xmlsoccer(url, match_file)
 
 def process_xml(matches_data, match_file):
     

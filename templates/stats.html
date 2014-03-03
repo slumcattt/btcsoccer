@@ -1,0 +1,31 @@
+
+<table>
+  <tr><th>Balance<td>{{balance}}
+  <tr><th>Balance-dispatch<td>{{balance_dispatch}}
+
+  <tr><th>Active bets<td>{{total_bets_open}}
+  <tr><th>Active bets (mbtc)<td>{{total_bets_open_mbtc}}
+  <tr><th>Total bets<td>{{total_bets}}
+  <tr><th>Total bets (mbtc)<td>{{total_bets_mbtc}}
+
+  <tr><th>Total paid (winner)<td>{{total_tx_winnings}}
+  <tr><th>Total paid (returned, no winner)<td>{{total_tx_allwrong}}
+  <tr><th>Total paid (returned, invalid bet)<td>{{total_tx_invalid}}
+</table>
+
+
+
+<table class="txs">
+  {{#txs}}
+  <tr><td>{{#game}}{{home}}-{{away}}{{/game}}
+      <td>{{#game}}{{result}}{{/game}}
+        <td>{{type}}
+        <td>{{txid}}
+        <td>
+          <table>
+            {{#outputs}}
+            <tr><td>{{address}}<td>{{amount}}
+            {{/outputs}}
+          </table>
+  {{/txs}}
+</table>

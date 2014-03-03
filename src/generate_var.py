@@ -5,6 +5,7 @@ import pystache
 
 from datetime import date, datetime, timedelta
 import dateutil.parser
+import wallet
 import btcs
 from decimal import Decimal
 
@@ -34,11 +35,21 @@ def generate_pub():
             in  os.listdir(btcs.path('games/new', ''))}
 
 
+    # load all active betslips
     slipids = os.listdir(btcs.path('bets/received', '')) 
     slips = { slipid: json.loads(open(btcs.path('bets/received',slipid),'r').read()) 
             for slipid 
             in slipids}
 
+    # setup stats
+    stats = { 
+        'balance':              wallet.getbalance(),
+        'balance_dispatch':     wallet.getbalancedispatch(),
+        'total_bets_open':      0,
+        'total_bets_open_mbtc': 0,
+        'total_bets':           0,
+        'total_bets_mbtc':      0
+    }
 
     for gameid, game in games.iteritems():
 
@@ -50,21 +61,22 @@ def generate_pub():
         game['total'] = 0
 
         # sum all results found in bets
-
         for slip in slips.values():
             for bet in slip['bets']:
                 if bet['game'] == gameid:
                     h,a = bet['result'].split('-')
-                    h = int(h)
-                    a = int(a)
-                    am = int(Decimal(bet['amount']))
+                    h,a = int(h), int(a)
+                    am = int(bet['amount'])
                     game['results'][a]['cols'][h]['score'] = (
                         game['results'][a]['cols'][h]['score'] + am)
                     game['total'] = game['total'] + am
+                    stats['total_bets_open']+=1
+                    stats['total_bets_open_mbtc'] += am
                     
 
 
     # walk again through slips to generate account info
+    # and get totals
     accounts = {}
     for slipid in slips:
         slip = slips[slipid]
@@ -76,12 +88,17 @@ def generate_pub():
 
             accounts[slip['accountid']][bet['game']].append(bet)
 
+            stats['total_bets']+=1
+            stats['total_bets_mbtc'] += int(bet['amount'])
+
         accounts[slip['accountid']]['slips'].append(slipid)
 
 
+    # write account-details
     for (accountid, account) in accounts.iteritems():
         btcs.writejson(btcs.path('var', accountid), account)
 
+    # sort by game date
     games = sorted(games.values(), key=lambda game: game['date'])
 
     # walk through games to generate data for templates
@@ -95,7 +112,8 @@ def generate_pub():
 
     # split in live/today/later
     now = datetime.utcnow()
-    now = modification_date(btcs.path('cache', 'matches.xml'))
+    if os.path.exists(btcs.path('input', 'matches_live.xml')):
+        now = modification_date(btcs.path('input', 'matches_live.xml'))
 
     maxtime_live = (now + timedelta(minutes = btcs.DEADLINE_MINS)).isoformat()
     maxtime_today = datetime(now.year, now.month, now.day, 23,59,59,0, None).isoformat()
@@ -105,10 +123,36 @@ def generate_pub():
     later = [ game for game in games if game['date'] >= maxtime_today]
 
 
-    later = later[:15]
     alldata = { 'games': { 'live': live, 'today': today, 'later': later } }
     
     render('games.html', alldata)
+
+    # now we're gonne generate stats
+    txids = os.listdir(btcs.path('tx/new', '')) 
+    txs = [ { "txid": txid, "info": json.loads(open(btcs.path('tx/new',txid),'r').read()) }
+            for txid 
+            in txids]
+
+    def sumtx(txtype, txs):
+        total = 0
+        for tx in txs:
+            if tx['info']['type'] == txtype:
+                total += sum(tx['info']['outputs'].values())
+        return total
+
+    stats['total_tx_winnings'] = sumtx('winnings', txs)
+    stats['total_tx_allwrong'] = sumtx('allwrong', txs)
+    stats['total_tx_invalid'] = sumtx('invalid', txs)
+
+    # we should transform tx output dict to array for mustache rendering
+    for tx in txs:
+        tx['outputs'] = [ {"address": k, "amount":v} for k,v in tx['info']['outputs'].items()]
+        tx['game'] = tx['info']['game']
+        tx['type'] = tx['info']['type']
+    stats['txs'] = txs
+
+
+    render('stats.html', stats)
 
     #print(alldata)
 

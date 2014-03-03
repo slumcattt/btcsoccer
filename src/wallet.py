@@ -40,12 +40,19 @@ def findreturnaddress(tx):
     return return_address
 
 def payout(outputs):
-    bitcoind.sendmany('dispatch', outputs)
+    return bitcoind.sendmany('dispatch', outputs)
 
 def movetodispatch(address, amount):
     account = bitcoind.getaccount(address)
     bitcoind.move(account, 'dispatch', amount)
 
 
+def getbalance():
+    return bitcoind.getbalance("*", 0)
+
+def getbalancedispatch():
+    return bitcoind.getbalance('dispatch', 0)
+
 if __name__ == '__main__':
     print(bitcoind.getinfo())
+

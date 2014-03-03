@@ -11,6 +11,7 @@ var max_amount            = 100;
 /* delayed load */
 $(function() {
    $('#faq').load('faq.html');
+   $('#stats').load('var/stats.html');
 
    var chatRef = new Firebase('https://btcsoccer.firebaseio.com/chat');
    var chat = new FirechatUI(chatRef, document.getElementById("chats"));

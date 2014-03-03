@@ -28,7 +28,7 @@ def sum_bets(bets):
     return sum(Decimal(bet['amount']) for bet in bets)
 
 
-def payout(bets, total):
+def payout(bets, total, game, txtype):
     " payout the amount of total divided over bets "
 
     divider = sum_bets(bets)
@@ -37,7 +37,7 @@ def payout(bets, total):
     for bet in bets:
         amount = Decimal(bet['amount']) / divider * total
 
-        # could be double, then add
+        # could be betted twice thus add
         if bet['return_address'] in outputs:
             amount = amount + outputs[bet['return_address']] 
 
@@ -47,10 +47,19 @@ def payout(bets, total):
     for o in outputs:
         outputs[o] = outputs[o] / Decimal(1000)
 
+    
 
     logging.info('Paying: %s', repr(outputs))
     if not DRYRUN:
-        wallet.payout(outputs)
+        txid = wallet.payout(outputs)
+
+        btcs.writejson(btcs.path('tx/new', txid), {
+            "type": txtype,
+            "game": game,
+            "outputs": outputs })
+
+
+
 
 def process_outgoing(gameid):
 
@@ -99,7 +108,7 @@ def process_outgoing(gameid):
             else:
                 invalidbet.append(bet)
 
-            wallet.movetodispatch(betslipid, Decimal(bet['amount']))
+            wallet.movetodispatch(betslipid, Decimal(bet['amount']) / Decimal('1000'))
 
     # move to process for atomicity
     if not DRYRUN:
@@ -111,7 +120,7 @@ def process_outgoing(gameid):
     if invalidbet:
         logging.info('Invalid: ' + repr(invalidbet))
 
-        payout(invalidbet, sum_bets(invalidbet))
+        payout(invalidbet, sum_bets(invalidbet), game, 'invalid')
 
     if len(correctbet) >0:
         logging.info('Correct: ' + repr(correctbet))
@@ -119,12 +128,12 @@ def process_outgoing(gameid):
 
         total = sum_bets(wrongbet) * (Decimal('1') - btcs.BTCS_FEE) + sum_bets(correctbet)
         logging.info('Total wrong %s, total correct %s payout %s' % (repr(sum_bets(wrongbet)), repr(sum_bets(correctbet)), repr(total)))
-        payout(correctbet, total )
+        payout(correctbet, total, game, 'winnings' )
 
     elif len(wrongbet) > 0:
         logging.info('Only wrong bets: ' + repr(wrongbet))
 
-        payout(wrongbet, sum_bets(wrongbet))
+        payout(wrongbet, sum_bets(wrongbet), game, 'allwrong' )
 
 
     
