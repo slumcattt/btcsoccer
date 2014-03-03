@@ -197,7 +197,7 @@ function getLocaleShortDateString(d)
 function formatDate(iso) {
 
     var dt = new Date(iso);
-    return getLocaleShortDateString(dt) + '<br>' + dt.toLocaleTimeString().substr(0,5);
+    return getLocaleShortDateString(dt) + '<br>' + ('0'+dt.getHours()).substr(-2,2) + ':' +  ('0'+dt.getMinutes()).substr(-2,2) 
 }
 
 // load games from server
@@ -283,7 +283,7 @@ function checkPayment(slips) {
 
        markBetslipBets();
 
-       loadTab('#games');
+       $('#checkout').toggle(false); 
 
        delete window.active_betslip;
 
