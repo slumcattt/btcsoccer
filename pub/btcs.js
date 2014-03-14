@@ -137,7 +137,7 @@ function checkout() {
                 .append('<input type="button" class="btn-remove" value="X">')
                 .append('<img src="'+img + '">')
                 .append('<a href="' +uri +'">pay here</a>')
-                .append('<p>Waiting for payment');
+                .append('<p>Waiting for payment...');
             $('#checkout .btn-remove').click(function() {
                 stopCheckout();
             })
