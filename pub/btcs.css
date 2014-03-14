@@ -199,6 +199,7 @@ nav ul li.selected {
 }
 
 /* SECTION */
+#content { min-height: 50vh; }
 #content2 { background-color: #6fa9ee; }
 #content3 { width: 100%; overflow: hidden; }
 #content4 { background-color: #ffa314; }
@@ -317,6 +318,7 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 #leagues li { padding: 5px 5px 5px 45px; background: url(img/league_mark.png) no-repeat left; 
     cursor: pointer; }
 #leagues li.selected { background-image: url(img/league_mark_selected.png);  }
+#leagues li.gameselected { background-color: #ffb54b; }
 #leagues li.b { margin-top: 25px; }
 
 /* STATS */

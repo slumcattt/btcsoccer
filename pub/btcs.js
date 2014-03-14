@@ -228,10 +228,7 @@ function loadGames() {
             $(this).html(formatDate($(this).html()));
         })
 
-        $('section:not(#betslip) ul.games').each(function() {
-
-            $(this).prev().toggle($('li', this).length > 0);
-        });
+        updateLeagueDisplay();
                 
         if (window.my_bets)
             setMyBets(window.my_bets);
@@ -344,11 +341,15 @@ $(function() {
         if ($li.hasClass('selected'))
         {
             $li.removeClass('selected');
+            $('#leagues li').removeClass('gameselected');
         }
         else
         {
             $('#games li.selected').removeClass('selected')
             $li.addClass('selected');
+            var league = $li.attr('data-league');
+
+            $('#leagues li[data-league="'+league+'"]').addClass('gameselected');
         }
     })
 })
@@ -530,10 +531,41 @@ $(function() {
 /* LEAGUE SELECTION */
 $(function() {
     $('#leagues li').click(function() {
+         // close game
+         $('#leagues li').removeClass('gameselected');
+         $('#games .games li').removeClass('selected');
+
         $(this).toggleClass('selected');
+        var leagues_off = '';
+        $('#leagues li:not(.selected)').each(function() {
+            leagues_off += ','+$(this).attr('data-league');
+        })
+        localStorage['leagues'] = leagues_off;
+        updateLeagueDisplay();
     });
 
+    var leagues_off = localStorage['leagues'] || '';
+    $('#leagues li').each(function() {
+        var off = (leagues_off.indexOf($(this).attr('data-league')) > -1)
+        $(this).toggleClass('selected', !off);
+    });
+
+
 });
+
+function updateLeagueDisplay() {
+    var leagues_off = localStorage['leagues'] || '';
+    $('#games li').each(function() {
+        var off = (leagues_off.indexOf($(this).attr('data-league')) > -1)
+        $(this).toggle(!off);
+    });
+
+    // hide headers for hidden leagues
+     $('section:not(#betslip) ul.games').each(function() {
+
+         $(this).prev().toggle($('li:visible', this).length > 0);
+     });
+}
 
 // Hide Header on on scroll down
 var didScroll;
