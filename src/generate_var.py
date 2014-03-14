@@ -44,8 +44,8 @@ def generate_pub():
 
     # setup stats
     stats = { 
-        'balance':              wallet.getbalance(),
-        'balance_dispatch':     wallet.getbalancedispatch(),
+        'balance':              wallet.getbalance() * 1000,
+        'balance_dispatch':     wallet.getbalancedispatch() * 1000,
         'total_bets_open':      0,
         'total_bets_open_mbtc': 0,
         'total_bets':           0,
@@ -160,8 +160,8 @@ def generate_pub():
         total = 0
         for tx in txs:
             if tx['info']['type'] == txtype:
-                total += sum(tx['info']['outputs'].values())
-        return total
+                total += sum(tx['info']['outputs'].values()) 
+        return total * 1000
 
     stats['total_tx_winnings'] = sumtx('winnings', txs)
     stats['total_tx_allwrong'] = sumtx('allwrong', txs)

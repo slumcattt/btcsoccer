@@ -330,6 +330,15 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 #stats .a { display: none; }
 
 
+
 /* CHECKOUT */
 #checkout p { color: #565656; }
+
+/* CHATS */
+#chats input.m { display: block: float: left; margin: 5px 5px 15px 240px; width: 580px; }
+#chats input.b { display: block; color: #ffb54b; float: right; }
+#chats input { border: none; background-color: #565656; height: 25px; }
+
+#chats span.u { font-style: italic; }
+#chats #chatbox { overflow-y: scroll; }
 

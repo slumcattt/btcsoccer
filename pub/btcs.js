@@ -2,6 +2,8 @@
 /* main js */
 var update_games_interval = 7000;
 var update_check_payment_interval = 800;
+var update_chat_interval  = 17000;
+var update_chat_interval_reduced = 3000; // after adding a msg
 var default_amount        = 2;
 var max_amount            = 100;
 
@@ -12,7 +14,6 @@ var max_amount            = 100;
 $(function() {
    $('#faq').load('faq.html');
    $('#stats').load('var/stats.html');
-   $('#chatbox').load('var/chat.html');
 
 /*
    var chatRef = new Firebase('https://btcsoccer.firebaseio.com/chat');
@@ -65,6 +66,22 @@ function getAccountId()
     }
     return localStorage['accountid'];
 }
+//
+// create new or return existsing username
+function getUsername()
+{
+    var names = ['christiano', 'fabio', 'andre', 'pavel', 'michael', 'luis', 'matthias', 'george',
+        'hristo', 'roberto', 'marco', 'lothar', 'jean-pierre', 'ruud', 'igor', 'michel', 'paolo',
+        'kevin', 'allan', 'franz', 'johan', 'gerd', 'gianni', 'florian', 'bobby', 'denis', 'lev']
+
+    if (!localStorage['username'])
+    {
+        localStorage['username'] = names[Math.floor(Math.random()*names.length)] +
+            (Math.round(Math.random()*10000)); 
+    }
+    return localStorage['username'];
+}
+
 
 function stopCheckout() {
   markBetslipBets();
@@ -622,11 +639,11 @@ $(function() {
 /* CHAT */
 
 $(function() {
-    $('#chats input.b').click(function() {
+    $('#chats form').submit(function() {
         var m= $('#chats input.m').val();
         var chat = {
             m: m,
-            u: 'anon',
+            u: getUsername(),
             i: getAccountId() };
         if (m)
         {
@@ -637,6 +654,36 @@ $(function() {
               data: JSON.stringify(chat),
               contentType: "application/json"
            })
+
+           $('#chatbox').append($('<p>')
+                .append($('<span class="t">').text(formatDate(new Date()).replace('<br>', ' ')))
+                .append(' ')
+                .append($('<span class="u">').text(getUsername()))
+                .append(' ')
+                .append($('<span class="m">').text(m)));
+
+           $('#chatbox')[0].scrollTop = $('#chatbox')[0].scrollHeight; 
+           update_chat_interval = update_chat_interval_reduced;
         }
+        $('#chats input.m').val('');
+        return false;
     })
 })
+
+
+function loadChat()
+{
+   $('#chatbox').load('var/chat.html', function() {
+      $('#chatbox span.t').each(function() {
+       $(this).text(formatDate($(this).text()).replace('<br>', ' '));
+      })
+      $('#chatbox')[0].scrollTop = $('#chatbox')[0].scrollHeight; 
+    });
+   window.chat_timer = window.setTimeout(loadChat, update_chat_interval);
+}
+
+$(function() {
+    loadChat();
+});
+
+

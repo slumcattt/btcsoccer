@@ -7,7 +7,8 @@ import simplejson as json
 SOCCER_URL   = "http://www.xmlsoccer.com/FootballData.asmx"
 SOCCER_KEY   = "PHVDAYLCCFJMPDZSUODPDARGUNEWQFEJEZBAXLKFEJQMBTUNVH"
 
-LEAGUES      = ('Serie A', 'La Liga', 'Eredivisie')
+LEAGUES      = ('Bundesliga', 'Europe League', 'Serie A', 'La Liga', 
+                'Eredivisie', 'Champions League', 'English Premier League')
 
 
 
