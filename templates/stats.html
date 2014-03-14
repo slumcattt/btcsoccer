@@ -1,31 +1,48 @@
 
-<table>
-  <tr><th>Balance<td>{{balance}}
-  <tr><th>Balance-dispatch<td>{{balance_dispatch}}
+<div class="my">
+  <h3>My Stats</h3>
+  <table class="n">
+    <tr><th>Betslip bets<td>?
+    <tr><th>Betslip bets (mBTC)<td>?
+    <tr><th>Active bets<td>?
+    <tr><th>Active bets (mBTC)<td>?
+  </table>
+</div>
+<div class="global">
+  <h3>Global Stats</h3>
+  <table class="n">
+    <tr class="a"><th>Balance<td>{{balance}}
+    <tr class="a"><th>Balance-dispatch<td>{{balance_dispatch}}
 
-  <tr><th>Active bets<td>{{total_bets_open}}
-  <tr><th>Active bets (mbtc)<td>{{total_bets_open_mbtc}}
-  <tr><th>Total bets<td>{{total_bets}}
-  <tr><th>Total bets (mbtc)<td>{{total_bets_mbtc}}
+    <tr><th>Active bets<td>{{total_bets_open}}
+    <tr><th>Active bets (mBTC)<td>{{total_bets_open_mbtc}}
+    <tr><th>Total bets<td>{{total_bets}}
+    <tr><th>Total bets (mBTC)<td>{{total_bets_mbtc}}
 
-  <tr><th>Total paid (winner)<td>{{total_tx_winnings}}
-  <tr><th>Total paid (returned, no winner)<td>{{total_tx_allwrong}}
-  <tr><th>Total paid (returned, invalid bet)<td>{{total_tx_invalid}}
-</table>
+    <tr><th>Total paid (winnings)<td>{{total_tx_winnings}}
+    <tr><th>Total paid (refunds)<td>{{total_tx_allwrong}}
+    <tr class="a"><th>Total paid (returned, invalid bet)<td>{{total_tx_invalid}}
+  </table>
+</div>
+<br>
+
+<div class="latesttx">
+  <h3>Latest outgioing transactions<h3>
 
 
 
-<table class="txs">
-  {{#txs}}
-  <tr><td>{{#game}}{{home}}-{{away}}{{/game}}
-      <td>{{#game}}{{result}}{{/game}}
-        <td>{{type}}
-        <td>{{txid}}
-        <td>
-          <table>
-            {{#outputs}}
-            <tr><td>{{address}}<td>{{amount}}
-            {{/outputs}}
-          </table>
-  {{/txs}}
-</table>
+  <table class="txs">
+    {{#txs}}
+    <tr><td>{{#game}}{{home}}-{{away}}{{/game}}
+        <td>{{#game}}{{result}}{{/game}}
+          <td>{{type}}
+          <td>{{txid}}
+          <td>
+            <table>
+              {{#outputs}}
+              <tr><td>{{address}}<td>{{amount}}
+              {{/outputs}}
+            </table>
+    {{/txs}}
+  </table>
+</div>

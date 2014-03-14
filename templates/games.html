@@ -4,7 +4,7 @@
         <h3>Live Games</h3>
         <ul class="games live">
         {{#live}}
-        <li id="game-{{id}}">
+        <li id="game-{{id}}" data-league="{{league}}">
             <div class="overview">
               <div class="live">LIVE</div>
               <div class="status">{{status}}</div>
@@ -16,23 +16,20 @@
               <div class="home_goal_details">{{home_goal_details}}</div>
               <div class="away_goal_details">{{away_goal_details}}</div>
 
-              <div class="stake_total_label">TtlWagered</div>
-              <div class="stake_total">{{total}}</div>
-              <div class="stake_my_label">TtlWagered</div>
-              <div class="stake_my"></div>
-              <div class="stake_max_label">MyMaxWin</div>
-              <div class="stake_max"></div>
-                  
+              <div class="stake total">TtlWagered: <span>{{total}}</span></div>
+              <div class="stake my">MyStakes: <span>0</span></div>
+              <div class="stake max">MyMaxWin: <span>0</span></div>
+              <br>
             </div>
             <table class="bets">
               <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
-              {{#results}}
-              <tr><th>{{away}} 
-                  {{#cols}}
-                      <td>{{score}}
-                  {{/cols}}
-              {{/results}}
-
+{{#results}}
+<tr><th>{{away}} 
+{{#cols}}<td>{{score}}
+ 
+ 
+</td>{{/cols}}
+{{/results}}
             </table>
 
         {{/live}}
@@ -41,7 +38,7 @@
         <h3>Today&apos;s Games</h3>
         <ul class="games planned">
         {{#today}}
-        <li id="game-{{id}}">
+        <li id="game-{{id}}" data-league="{{league}}">
             <div class="overview">
               <div class="date">{{date}}</div>
               <div class="home">{{home}}</div>
@@ -50,18 +47,17 @@
 
               <div class="stake total">TtlWagered: <span>{{total}}</span></div>
               <div class="stake my">MyStakes: <span>0</span></div>
-              <div class="stake max">MyMaxWin: <span>0</span></div>
               <br>
             </div>
             <table class="bets">
               <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
-              {{#results}}
-              <tr><th>{{away}} 
-                  {{#cols}}
-                      <td>{{score}}
-                  {{/cols}}
-              {{/results}}
-
+{{#results}}
+<tr><th>{{away}} 
+{{#cols}}<td>{{score}}
+ 
+{{multiply}}
+</td>{{/cols}}
+{{/results}}
             </table>
 
         {{/today}}
@@ -70,7 +66,7 @@
         <h3>This Week&apos;s Games</h3>
         <ul class="games planned">
         {{#later}}
-        <li id="game-{{id}}">
+        <li id="game-{{id}}" data-league="{{league}}">
             <div class="overview">
               <div class="date">{{date}}</div>
               <div class="home">{{home}}</div>
@@ -79,18 +75,16 @@
 
               <div class="stake total">TtlWagered: <span>{{total}}</span></div>
               <div class="stake my">MyStakes: <span>0</span></div>
-              <div class="stake max">MyMaxWin: <span>0</span></div>
               <br>
             </div>
             <table class="bets">
               <tr><th><th>0<th>1<th>2<th>3<th>4<th>5
-              {{#results}}
-              <tr><th>{{away}} 
-                  {{#cols}}
-                      <td>{{score}}
-                  {{/cols}}
-              {{/results}}
-
+{{#results}}
+<tr><th>{{away}} 
+{{#cols}}<td>{{score}}
+ 
+{{multiply}}</td>{{/cols}}
+{{/results}}
             </table>
         {{/later}}
         </ul>

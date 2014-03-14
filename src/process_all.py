@@ -8,6 +8,7 @@ import load_games
 import process_btc_incoming
 import process_btc_outgoing
 import generate_var
+import generate_chat
 import purge
 
 import ctypes, signal
@@ -37,6 +38,7 @@ while True:
         process_btc_incoming.process_incoming_all()
         process_btc_outgoing.process_outgoing_all()  
         generate_var.generate_pub()
+        generate_chat.generate_chat()
         purge.purge()
     except Exception, e:
         logging.exception('Error during btcs processing')

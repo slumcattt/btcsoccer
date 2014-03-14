@@ -5,6 +5,9 @@ import web
 import re
 import os
 
+import redis
+import datetime
+
 import simplejson as json
 from decimal import *
 
@@ -13,17 +16,49 @@ import wallet
         
 web.config.debug = False
 urls = (
-    '/create-betslip', 'betslip'
+    '/create-betslip', 'Betslip',
+    '/add-chat', 'Chat'
 )
 
 app = web.application(urls, globals())
 
-class betslip:        
+class Betslip:        
     def GET(self):
         return 'OK' # monitoring
 
     def POST(self):
         return save_betslip(json.loads(web.data()))
+
+class Chat:
+    def GET(self):
+        return 'OK' # monitoring
+
+    def POST(self):
+        return chat(json.loads(web.data()))
+
+
+def chat(msg):
+    if not 'u' in msg:
+        raise web.internalerror('No user')
+    if not 'i' in msg:
+        raise web.interneterror('No accountid')
+    if not 'm' in msg:
+        raise web.interneterror('No msg')
+
+    if not re.match('^[a-zA-Z0-9]{6,20}$', msg['i']):
+        raise web.internalerror('Invalid accountid')
+    if not re.match('^[a-zA-Z0-9]{3,20}$', msg['u']):
+        raise web.internalerrror('Invalid user')
+
+    dt = datetime.datetime.utcnow().isoformat()
+    dat = '%s/%s/%s' % (dt, msg['u'], msg['m']) 
+
+    r = redis.Redis(host='127.0.0.1', port=6379, db=0)
+    r.lpush('chat', dat)
+
+    return "OK"
+
+
 
 
 def save_betslip(betslip):

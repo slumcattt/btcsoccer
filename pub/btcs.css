@@ -1,6 +1,8 @@
 /*    
  * colors
  * lightgrey : #ebefc0;
+ * darkgrey:   #565656;
+ * yellow:     #fff568;
 */
 
 
@@ -12,8 +14,14 @@ input { border: 1px solid #565656; margin:0;}
 ul { list-style:none; padding:0; margin:0; }
 table { border-spacing: 0; border-collapse: collapse; }
 input::-moz-focus-inner { border: 0; padding: 0; } /* Remove button padding in FF*/
+input { 
+   box-sizing: border-box;
+   -ms-box-sizing: border-box;
+   -webkit-box-sizing: border-box;
+   -moz-box-sizing: border-box;
+}
 
-#checkout, #betslip { display: none; }
+#checkout { display: none; }
 
 #chats  { max-width: 100%; overflow: hidden; }
 
@@ -30,18 +38,16 @@ header #logo {
 }
 
 ul#nav li { 
-   height: 70px;
-   padding-top: 10px;
    width: 120px; 
 }
-ul#nav li a { text-decoration: none; color: #ebcef0; }
+ul#nav li a { text-decoration: none; color: #ebecf0; }
 nav ul li.selected { 
    color: #ffb54b;
    background-color: #434343;
    border-top: 3px solid #eceff0;
 }
 
-/* DESKTOP & TABLET */
+/* MEDIUM & LARGE (DESKTOP & TABLET) */
 @media only screen and (min-width : 600px) {
    #intro { 
      font-size: 80px;
@@ -59,22 +65,72 @@ nav ul li.selected {
       width: 100%;
       z-index:9999;
    }
+   header .hdr .hdr_inner { margin: auto; width: 950px; }
 
    header.below .hdr { position:fixed; top:0; margin-top: 0;}
 
    ul#nav { float: right; }
-   ul#nav li { display: inline-block; }
+   ul#nav li { display: inline-block; padding-top:25px; text-align: center; font-weight: 600px; font-size: 120%; 
+     height: 50px;
+     padding-top: 10px;
+   }
+   ul#nav li.selected  { border-top: 4px solid #ffb54b; }
+   ul#nav li.selected a { color: #ffb54b; }
 
    #menu-btn, .back-btn, .betslip-btn { display: none; }
 
-   section {margin-left: 250px; width: 400px; }
+   section {margin-left: 240px; width: 380px; }
+
+
+   #betslip { display:none; }
+   .has-betslip #betslip { display: block; }
+   #betslip { position: absolute; left: 640px; width: 300px;margin-left:0px; }
+
+   body.lightbox { overflow: hidden; }
+   #checkout { position: fixed; width: 100vw; height:100vh; 
+      background:rgba(255, 255, 255, 0.7);
+         top: 0;
+         left: 0;
+         margin: 0;
+    }
+    #checkout .inner { background-color: #ebecf0;
+      margin: 200px auto 200px auto; width: 350px; height: 350px; position:relative;}
+        /*margin: auto; top: 250px; width: 300px; height: 300px; opacity: 1.0; }*/
+
+    #content { margin: auto; width: 950px; position: relative; }
+
+    .faqq { float: left; width: 475px;}
+    .faqa { float: right; width: 475px; }
+    #faq br { clear: both; }
+    #faq { width: 950px; margin: auto; }
+
+    #chats { margin: auto; width: 950px; }
+    #chats #chatbox { width: 710px; margin: 15px 0 5px 240px; height: 800px; background-color: #565656;position: relative;}
+    #chats input.m { display: block: float: left; margin: 5px 5px 15px 240px; width: 580px; }
+    #chats input.b { display: block; color: #ffb54b; float: right; }
+    #chats input { border: none; background-color: #565656; height: 25px; }
+
+    #stats { width: 950px; margin: auto; }
+
+}
+/* LARGE */
+@media only screen and (min-width : 950px ) {
+
+    #leagues_btn { display: none; }
+    section#leagues { position: absolute; left: 0px; margin-left: 0px; width: 220px; }
+}
+/* MEDIUM */
+@media only screen and (min-width : 600px, max-width: 950px ) {
+
+   #leagues { display: none; }
 }
 
- /* SMARTPHONES (LANDSCAPE & PORTRAIT) ----------- */
-
+/* SMALL (SMARTPHONES) */
 @media only screen and (max-width : 600px) {
 
    #intro { display: none; }
+   #betslip { display: none; }
+   #betslip h3 { display: none; }
 
    header .hdr { 
       height: 52px;
@@ -99,6 +155,15 @@ nav ul li.selected {
    .has-betslip #content { margin-top: 97px;}
    .betslip-btn { display: none; }
    .has-betslip .betslip-btn { display:block;}
+
+   body.lightbox { overflow: hidden; }
+   #checkout .inner { position: fixed; width: 100vw; height:100vh; 
+      background:rgba(255, 255, 255, 1);
+         top: 0;
+         left: 0;
+         margin: 0;
+         z-index: 99999;
+    }
 
    .back-btn { float: left; width:10%; background-color: #ebecf0; color: #565656;
       border-bottom: 1px #565656 solid;
@@ -129,16 +194,24 @@ nav ul li.selected {
    header ul#nav { display: none; }
    header.menu-active ul#nav { display: block; }
 
+
+   #leagues { display: none; }
 }
 
 /* SECTION */
-section h3, section h4 { margin: 15px 0 0 6px; font-size: 1em; font-weight: normal;padding: 3px;}
+#content2 { background-color: #6fa9ee; }
+#content3 { width: 100%; overflow: hidden; }
+#content4 { background-color: #ffb54b; }
+section h3, section h4 { margin: 0px 0 10px 6px; font-size: 1em; font-weight: normal;padding: 3px;}
 
 /* GAMES */
 
+#games .l { margin-bottom: 100vh; }
 /* selected game, hover game */
+.games { margin-bottom: 25px; }
 .games li { background-color: #3c3c3c; border-top: 1px #565656 solid; margin-bottom:1px; }
 .games li.selected .overview { background-color: #ffb54b; color: #565656;}
+.games li .overview { cursor: pointer; }
 
 
 /* BETS */
@@ -151,7 +224,7 @@ table.bets tr:nth-child(1) th:nth-child(1) { background-color: #ffb54b; border-t
 
 table.bets td.selected { background-color: #ffb54b; color: #565656;}
 table.bets { width: 100%; font-weight:500;}
-table.bets td { width: 15%; height: 5em; background-color: #6fa9e4; border: 1px #565656 solid;text-align: center; font-size: .6em;} 
+table.bets td { width: 15%; height: 5em; background-color: #6fa9e4; border: 1px #565656 solid;text-align: center; font-size: .6em; white-space: pre; cursor: pointer;} 
 table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656 solid;border-right: 1px #565656 solid;  text-align: center; }
 
 /* GAME OVERVIEW */
@@ -174,15 +247,19 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 
 .games li div.date { text-align: center; font-size: 75%; }
 
-.games li div.home { text-align: right; width: 44%; text-overflow: ellipsis; float:left;}
-.games li div.home_score {width: 4%; font-weight:500; float:left;}
-.games li div.away_score {width: 4%; font-weight:500; float:left;}
+.games li div.home { text-align: right; width: 44%; text-overflow: ellipsis; float:left; font-weight: 500;}
+.games li div.home_score {width: 4%; font-weight:700; float:left;}
+.games li div.away_score {width: 4%; font-weight:700; float:left;}
 .games li div.home_ind  { width: 4%; float:left; text-align: center;}
-.games li div.away {  width: 44%; text-overflow: ellipsis; float:left;}
+.games li div.away {  width: 44%; text-overflow: ellipsis; float:left; font-weight: 500;}
+
+.games li div.home_goal_details,
+.games li div.away_goal_details {width: 45%; white-space: pre-line; font-size: 75%; float:left;}
+.games li div.home_goal_details { text-align: right; margin-right: 10%; }
 
 
 .games li div.home { width: 44%; }
-.games li div.home_ind  { width: 12%; float:left; text-align: center;}
+.games.planned li div.home_ind  { width: 12%; float:left; text-align: center;}
 .games li div.away {  width: 44%; }
 
 .games li div.stake {  margin: 10px 0 5px 5%; width: 28%;  font-size: 65%; float: left; }
@@ -192,50 +269,67 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 
 
 
+
+
+
+
+
+
+
+#betslip .games { margin-bottom: 0px; }
+#betslip .games li { background-color: #fff568; color: #565656; }
+
+#betslip div.total-wager { background-color: #fff568; color: #545454; border-top: #545454 solid 1px; padding: 8px;}
+#betslip div.total-wager span { display:inline-block; width:50%; text-align:right; }
+#betslip div.total-wager span.v { display:inline-block; width:30%; text-align:right; }
+#betslip .return-address { width: 100%; font-size: 120%; text-align: center; padding: 10px; background-color: #565656;}
+#betslip .return-address-info { font-size: 70%; color: #ebecf0; padding: 5px; text-align: center; background-color: #565656;}
+
+
+#betslip .button { 
+   text-align: center; background-color: #565656; color: #ffb54b; border-top: #ebecf0; solid 1px;padding: 10px; font-weight: 700; cursor: pointer;}
+
+#betslip .overview { position: relative; }
+#betslip .overview .stake-edit { padding-top: 15px; margin: auto;text-align:center;}
+.stake-edit span {font-size: 75%; }
+.stake-edit input { border: none; margin: 1px; height: 20px; }
+
+.stake-edit input.v { width: 60px; font-weight: 600; color: #0ca9c5; margin-right:0;}
+.stake-edit input.u { width: 50px; padding-left: 10px; color: #565656; margin-left:0;}
+.stake-edit input.btn-plus,
+.stake-edit input.btn-minus { width: 16px; background-color:white; cursor:pointer;}
+.stake-edit input.btn-minus { margin-left: 5px; }
+.stake-edit input.v { text-align: right; }
+.btn-remove { position:absolute; right: 3px; top: 3px;background-color: #d61e22; color: #ebecf0; border: none; cursor:pointer;}
+
+
 /*  FAQ */
 
-.faq li a { font-weight: 300; color: #ffb54b; line-height:1.3em; }
-.faq h4 a { font-weight: 300; color: #ffb54b; padding-left: 12px; text-decoration: none; }
+#faq { padding-top: 20px; }
+.faq li a { font-weight: 300; color: #565656; line-height:1.3em; }
+.faq h4 a { font-weight: 300; color: #ebecf0; padding-left: 12px; text-decoration: none; }
 .faq p { font-weight: 300; color: #ebecf0; padding: 0 12px; }
 .faq li { padding: 0 12px; }
 
 
+/* LEAGUES */
+
+#leagues li { padding: 5px 5px 5px 45px; background: url(img/league_mark.png) no-repeat left; 
+    cursor: pointer; }
+#leagues li.selected { background-image: url(img/league_mark_selected.png);  }
+#leagues li.b { margin-top: 25px; }
+
+/* STATS */
+#stats { padding: 25px; }
+#stats table.n th { text-align: left; }
+#stats table.n td { text-align: right; padding: 20px; font-size: 150%; font-weight: 700; color:#6fa9ee; }
+#stats .my { width: 450px; float: left;}
+#stats .global { width: 450px; float: right;}
+#stats br { clear: both; }
+
+#stats .a { display: none; }
 
 
-@media (min-width: 2000px) {
+/* CHECKOUT */
+#checkout p { color: #565656; }
 
-#betslip { background-color: #fff568;}
-
-
-
-#betslip .games li { background-color: #6fa9ee; }
-#betslip { margin-top: 129px; }
-
-#betslip div.total-wager ,
-#betslip div.total-win { color: #545454; border-top: #545454 solid 1px; padding-top: 8px;}
-#betslip div.total-wager span,
-#betslip div.total-win span { display:inline-block; width:50%; text-align:right; }
-#betslip div.total-wager span.v,
-#betslip div.total-win span.v { display:inline-block; width:20%; text-align:right; }
-#betslip .return-address { width: 100%; font-size: 120%; text-align: center; padding: 10px; }
-#betslip .return-address-info { background-color: #ebecf0; color: #545454; padding: 5px; text-align: center;}
-
-
-#betslip .button { 
-   display: inline-block; width: 50%; background-color: #ebecf0; color: #545454;border: #545454 solid 1px;padding: 10px;}
-
-.stake-edit span {font-size: 75%; }
-.stake-edit input { width: 30%; border: none; margin: 1px; height: 18px; }
-
-.stake-edit input { width: 30%; }
-.stake-edit input { border: none; margin: 1px; height: 15px; }
-.stake-edit input.btn-plus,
-.stake-edit input.btn-minus { width: 16px; background-color:white; }
-.stake-edit input.btn-minus { margin-left: 5px; }
-.stake-edit input.v { text-align: right; }
-.btn-remove { float: right; margin: 5px; background-color: #d61e22; color: #ebecf0;}
-
-
-
-
-}

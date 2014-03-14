@@ -7,6 +7,7 @@ from datetime import date, datetime, timedelta
 import dateutil.parser
 import wallet
 import btcs
+import math
 from decimal import Decimal
 
 import simplejson as json
@@ -72,7 +73,24 @@ def generate_pub():
                     game['total'] = game['total'] + am
                     stats['total_bets_open']+=1
                     stats['total_bets_open_mbtc'] += am
-                    
+
+        # calculate multply
+        for a in range(6):
+            for h in range(6):
+                s = game['results'][a]['cols'][h]['score']
+
+                # the multiplier is total+bet / betted_here+bet
+                minbet = btcs.MIN_BET * 1000
+                mult = (game['total'] + minbet) / (minbet + s)
+                # round depends on size
+                if mult<2: 
+                    mult = 'x' + str(math.floor(mult*10)/10)
+                else:
+                    mult = 'x' + str(math.floor(mult))
+                if mult[-2:] == '.0':
+                    mult = mult[:-2]
+                game['results'][a]['cols'][h]['multiply'] = mult
+
 
 
     # walk again through slips to generate account info
@@ -107,6 +125,11 @@ def generate_pub():
 
         if 'result' in game:
             (game['home_score'], game['away_score']) = game['result'].split('-')
+
+        for f in ['home_goal_details', 'away_goal_details']:
+            if f in game:
+                game[f] = game[f].replace(';',"\n")
+
 
 
 

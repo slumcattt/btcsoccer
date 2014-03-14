@@ -36,6 +36,9 @@ def load_from_xmlsoccer(url, match_file):
     except urllib2.HTTPError:
         logging.error('Error processing %s' % url);
         logging.exception('HTTP Error occured, ignoring')
+    except urllib2.URLError:
+        logging.error('Error processing %s' % url);
+        logging.exception('URL Error occured, ignoring')
     else:
         process_xml(matches_data, match_file)
 
