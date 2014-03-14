@@ -25,6 +25,7 @@ input {
 
 #chats  { max-width: 100%; overflow: hidden; }
 
+
 /* HEADER */
 
 header #logo { 
@@ -94,7 +95,7 @@ nav ul li.selected {
          margin: 0;
     }
     #checkout .inner { background-color: #ebecf0;
-      margin: 200px auto 200px auto; width: 350px; height: 350px; position:relative;}
+      margin: 200px auto 200px auto; width: 570px; height: 300px; position:relative;}
         /*margin: auto; top: 250px; width: 300px; height: 300px; opacity: 1.0; }*/
 
     #content { margin: auto; width: 950px; position: relative; }
@@ -112,6 +113,9 @@ nav ul li.selected {
 
     #stats { width: 950px; margin: auto; }
 
+
+    #checkout img { float: left; margin: 15px; }
+
 }
 /* LARGE */
 @media only screen and (min-width : 950px ) {
@@ -123,6 +127,7 @@ nav ul li.selected {
 @media only screen and (min-width : 600px, max-width: 950px ) {
 
    #leagues { display: none; }
+    #leagues_btn { display: none; }
 }
 
 /* SMALL (SMARTPHONES) */
@@ -187,7 +192,8 @@ nav ul li.selected {
 
    header ul#nav li { 
       background: #565656;
-      height: 16px; }
+      padding: 5px;
+      height: 26px; }
 
    .nav-up { top: -52px; }
    /* hide menu behind button */
@@ -196,12 +202,13 @@ nav ul li.selected {
 
 
    #leagues { display: none; }
+    #leagues_btn { display: none; }
 }
 
 /* SECTION */
 #content { min-height: 50vh; }
 #content2 { background-color: #6fa9ee; }
-#content3 { width: 100%; overflow: hidden; }
+#content3 { width: 100%; overflow: hidden; min-height: 95vh;}
 #content4 { background-color: #ffa314; }
 section h3, section h4 { margin: 0px 0 10px 6px; font-size: 1em; font-weight: normal;padding: 3px;}
 
@@ -331,10 +338,14 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 
 #stats .a { display: none; }
 
+#stats .txs a { max-width: 150px; overflow:hidden; text-overflow: ellipsis; display: inline-block; }
+
 
 
 /* CHECKOUT */
-#checkout p { color: #565656; }
+#checkout p, #checkout h2 { color: #565656; }
+#checkout h2 { margin: 15px; }
+#checkout .warn { font-weight: bold; }
 
 /* CHATS */
 #chats input.m { display: block: float: left; margin: 5px 5px 15px 240px; width: 580px; }

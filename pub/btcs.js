@@ -15,21 +15,6 @@ $(function() {
    $('#faq').load('faq.html');
    $('#stats').load('var/stats.html');
 
-/*
-   var chatRef = new Firebase('https://btcsoccer.firebaseio.com/chat');
-   var chat = new FirechatUI(chatRef, document.getElementById("chats"));
-   var simpleLogin = new FirebaseSimpleLogin(chatRef, function(err, user) {
-       if (err) {
-           // an error occurred while attempting login
-           console.log(error);
-       } else if (user) {
-         console.log('CHAT: logging in user', user);
-         chat.setUser(user.id, 'Anonymous' + getAccountId());
-       } else {
-         console.log('CHAT: not logging in user', user);
-       }
-   });
-   */
 });
 
 
@@ -40,8 +25,7 @@ $(function() {
 
     /* toggle mobile betslip */
     $('.betslip-btn').on('click', function() { 
-        $('section:not(#betslip):not(#checkout)').toggle();
-        $('#betslip').toggle(); 
+        $('section:not(#leagues):not(#checkout)').toggle();
         fillBetslipBox();
     });
 
@@ -101,6 +85,17 @@ function checkout() {
         accountid: getAccountId(),
         bets: []
     };
+    var ret = $('input.return-address').val();
+    if (ret)
+    {
+        if (!/^[13][a-zA-Z0-9]{26,33}$/.test(ret))
+        {
+            alert('Invalid return address');
+            stopCheckout();
+            return;
+         }
+        slip.return_address = ret;
+    }
 
     var total = 0.0;
     for(var k in localStorage)
@@ -135,9 +130,17 @@ function checkout() {
             $('#checkout .inner')
                 .empty()
                 .append('<input type="button" class="btn-remove" value="X">')
-                .append('<img src="'+img + '">')
-                .append('<a href="' +uri +'">pay here</a>')
+                .append('<h2>Total: '+total+'</h2>')
+                .append('<img href="'+uri+'" src="'+img + '">')
+                .append('<p>Send exactly <span class="a">' + total + '</span> BTC (plus miner fee) to:')
+                .append('<p><a href="' +uri +'">'+data+'</a>')
                 .append('<p>Waiting for payment...');
+            if (!slip.return_address)
+            {
+               $('#checkout .inner').append('<p class="warn">Profits will be returned to the senders address.'
+                + ' Use a wallet, or an online service that gives you control of the senders address.');
+            }
+                
             $('#checkout .btn-remove').click(function() {
                 stopCheckout();
             })

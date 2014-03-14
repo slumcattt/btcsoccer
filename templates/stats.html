@@ -2,10 +2,10 @@
 <div class="my">
   <h3>My Stats</h3>
   <table class="n">
-    <tr><th>Betslip bets<td>?
-    <tr><th>Betslip bets (mBTC)<td>?
-    <tr><th>Active bets<td>?
-    <tr><th>Active bets (mBTC)<td>?
+    <tr><th>Betslip bets<td>0
+    <tr><th>Betslip bets (mBTC)<td>0
+    <tr><th>Active bets<td>0
+    <tr><th>Active bets (mBTC)<td>0
   </table>
 </div>
 <div class="global">
@@ -36,7 +36,7 @@
     <tr><td>{{#game}}{{home}}-{{away}}{{/game}}
         <td>{{#game}}{{result}}{{/game}}
           <td>{{type}}
-          <td>{{txid}}
+            <td><a target="_new" href="http://blockr.io/tx/info/{{txid}}">{{txid}}</a>
           <td>
             <table>
               {{#outputs}}
