@@ -650,12 +650,6 @@ $(function() {
         var target = this.hash,
         $target = $(target);
         var target_top = $target.offset().top;
-        console.log('scrolling to ' , $target, target_top, $('header .hdr').height(), $('#intro').height());
-        /*
-        if (target == '#games' && isSmartPhone())
-          target_top = 0;
-        console.log('scrolling to ' , $target, target_top);
-        */
 
         if (!isSmartPhone()) 
             target_top -= $('header .hdr').height();

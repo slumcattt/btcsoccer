@@ -71,7 +71,7 @@ nav ul li.selected {
    header.below .hdr { position:fixed; top:0; margin-top: 0;}
 
    ul#nav { float: right; }
-   ul#nav li { display: inline-block; padding-top:25px; text-align: center; font-weight: 600px; font-size: 120%; 
+   ul#nav li { display: inline-block; padding-top:25px; text-align: center; font-weight: 600; font-size: 120%; 
      height: 50px;
      padding-top: 10px;
    }
@@ -107,7 +107,7 @@ nav ul li.selected {
 
     #chats { margin: auto; width: 950px; }
     #chats #chatbox { width: 710px; margin: 15px 0 5px 240px; height: 800px; background-color: #565656;position: relative;}
-    #chats input.m { display: block: float: left; margin: 5px 5px 15px 240px; width: 580px; }
+    #chats input.m { display: block; float: left; margin: 5px 5px 15px 240px; width: 580px; }
     #chats input.b { display: block; color: #ffb54b; float: right; }
     #chats input { border: none; background-color: #565656; height: 25px; }
 
@@ -124,7 +124,7 @@ nav ul li.selected {
     section#leagues { position: absolute; left: 0px; margin-left: 0px; width: 220px; }
 }
 /* MEDIUM */
-@media only screen and (min-width : 600px, max-width: 950px ) {
+@media only screen and (min-width : 600px) and (max-width: 950px ) {
 
    #leagues { display: none; }
     #leagues_btn { display: none; }
@@ -214,7 +214,6 @@ section h3, section h4 { margin: 0px 0 10px 6px; font-size: 1em; font-weight: no
 
 /* GAMES */
 
-#games .l { margin-bottom: 100vh; }
 /* selected game, hover game */
 .games { margin-bottom: 25px; }
 .games li { background-color: #3c3c3c; border-top: 1px #565656 solid; margin-bottom:1px; }
@@ -295,7 +294,7 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 
 
 #betslip .button { 
-   text-align: center; background-color: #565656; color: #ffb54b; border-top: #ebecf0; solid 1px;padding: 10px; font-weight: 700; cursor: pointer;}
+   text-align: center; background-color: #565656; color: #ffb54b; border-top: #ebecf0; padding: 10px; font-weight: 700; cursor: pointer;}
 
 #betslip .overview { position: relative; }
 #betslip .overview .stake-edit { padding-top: 15px; margin: auto;text-align:center;}
@@ -314,10 +313,10 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 /*  FAQ */
 
 #faq { padding-top: 20px; }
-.faq li a { font-weight: 300; color: #565656; line-height:1.3em; }
-.faq h4 a { font-weight: 300; color: #ebecf0; padding-left: 12px; text-decoration: none; }
-.faq p { font-weight: 300; color: #ebecf0; padding: 0 12px; }
-.faq li { padding: 0 12px; }
+#faq li a { font-weight: 300; color: #565656; line-height:1.3em; }
+#faq h4 a { font-weight: 300; color: #ebecf0; padding-left: 12px; text-decoration: none; }
+#faq p { font-weight: 300; color: #ebecf0; padding: 0 12px; }
+#faq li { padding: 0 12px; }
 
 
 /* LEAGUES */
@@ -348,7 +347,7 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 #checkout .warn { font-weight: bold; }
 
 /* CHATS */
-#chats input.m { display: block: float: left; margin: 5px 5px 15px 240px; width: 580px; }
+#chats input.m { display: block; float: left; margin: 5px 5px 15px 240px; width: 580px; }
 #chats input.b { display: block; color: #ffb54b; float: right; }
 #chats input { border: none; background-color: #565656; height: 25px; }
 
