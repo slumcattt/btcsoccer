@@ -70,6 +70,10 @@ def process_xml(matches_data, match_file):
     with open(match_file, 'w') as f:
         f.write(matches_data)
 
+    # log results
+    with open(match_file.replace('data/', 'log/') + '-' + datetime.utcnow().isoformat(), 'w') as f:
+        f.write(matches_data)
+
     new, updated, finished = 0, 0, 0
 
     matches = []

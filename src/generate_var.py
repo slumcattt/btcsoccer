@@ -128,7 +128,8 @@ def generate_pub():
 
         for f in ['home_goal_details', 'away_goal_details']:
             if f in game:
-                game[f] = game[f].replace(';',"\n")
+                if game[f]:
+                    game[f] = game[f].replace(';',"\n")
 
 
 
