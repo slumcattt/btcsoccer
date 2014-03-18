@@ -206,7 +206,7 @@ nav ul li.selected {
 }
 
 /* SECTION */
-#content { min-height: 50vh; }
+#content { min-height: 95vh; }
 #content2 { background-color: #6fa9ee; }
 #content3 { width: 100%; overflow: hidden; min-height: 95vh;}
 #content4 { background-color: #ffa314; }

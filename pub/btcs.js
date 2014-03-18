@@ -571,7 +571,10 @@ function updateLeagueDisplay() {
      $('section:not(#betslip) ul.games').each(function() {
 
          $(this).prev().toggle($('li:visible', this).length > 0);
+
      });
+     // Display No games found message if needed
+     $('#games p.n').toggle(($('#games h3:visible').length == 0));
 }
 
 // Hide Header on on scroll down
