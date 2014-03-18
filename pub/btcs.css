@@ -14,7 +14,7 @@ input { border: 1px solid #565656; margin:0;}
 ul { list-style:none; padding:0; margin:0; }
 table { border-spacing: 0; border-collapse: collapse; }
 input::-moz-focus-inner { border: 0; padding: 0; } /* Remove button padding in FF*/
-input { 
+input, .betslip-btn { 
    box-sizing: border-box;
    -ms-box-sizing: border-box;
    -webkit-box-sizing: border-box;

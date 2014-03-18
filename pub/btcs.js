@@ -67,6 +67,7 @@ function getUsername()
 }
 
 
+// end checkout process
 function stopCheckout() {
   markBetslipBets();
   delete window.active_betslip;
@@ -85,6 +86,7 @@ function checkout() {
         accountid: getAccountId(),
         bets: []
     };
+
     var ret = $('input.return-address').val();
     if (ret)
     {
@@ -97,6 +99,7 @@ function checkout() {
         slip.return_address = ret;
     }
 
+    // calc total
     var total = 0.0;
     for(var k in localStorage)
     {
@@ -113,7 +116,6 @@ function checkout() {
 
         }
     }
-    // generate total
     total = (total/1000).toFixed(3);
 
     delete window.active_betslip;
@@ -125,6 +127,7 @@ function checkout() {
         data: JSON.stringify(slip),
         contentType: "application/json",
         success: function(data) { 
+            /* setup checkout form */
             var uri = 'bitcoin:' + data +'?amount='+total;
             var img = '//chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
             $('#checkout .inner')
@@ -470,13 +473,14 @@ $(function() {
     // remove a bet
     $('#betslip').on('click', '.btn-remove', function() {
         var k = $(this).closest('li').find('input.v').attr('data-storage');
+        console.log('removing bet: ' + k);
         localStorage.removeItem(k);
         $(this).closest('li').remove();
         markBetslipBets();
         if ($('#betslip ul.games li').length == 0)
         {
             // closing
-            $('.back-btn').click();
+            $('.betslip-btn').click();
         }
 
 
