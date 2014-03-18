@@ -106,7 +106,7 @@ nav ul li.selected {
     #faq { width: 950px; margin: auto; }
 
     #chats { margin: auto; width: 950px; }
-    #chats #chatbox { width: 710px; margin: 15px 0 5px 240px; height: 800px; background-color: #565656;position: relative;}
+    #chats #chatbox { width: 710px; margin: 15px 0 5px 240px; height: 75vh; background-color: #565656;position: relative;}
     #chats input.m { display: block; float: left; margin: 5px 5px 15px 240px; width: 580px; }
     #chats input.b { display: block; color: #ffb54b; float: right; }
     #chats input { border: none; background-color: #565656; height: 25px; }
@@ -128,6 +128,9 @@ nav ul li.selected {
 
    #leagues { display: none; }
     #leagues_btn { display: none; }
+
+   section {margin-left: 15px; }
+   section#betslip {left: 415px; }
 }
 
 /* SMALL (SMARTPHONES) */
@@ -160,6 +163,20 @@ nav ul li.selected {
    .has-betslip #content { margin-top: 97px;}
    .betslip-btn { display: none; }
    .has-betslip .betslip-btn { display:block;}
+
+   body.betslip-open section, 
+   body.betslip-open #content2,
+   body.betslip-open #content3,
+   body.betslip-open #content4 { display: none; }
+   body.betslip-open section#betslip { display: block; }
+   body.betslip-open #content { min-height: 0; }
+
+   body.league-open section, 
+   body.league-open #content2,
+   body.league-open #content3,
+   body.league-open #content4 { display: none; }
+   body.league-open section#leagues { display: block; }
+   body.league-open #content { min-height: 0; }
 
    body.lightbox { overflow: hidden; }
    #checkout .inner { position: fixed; width: 100vw; height:100vh; 
@@ -202,13 +219,14 @@ nav ul li.selected {
 
 
    #leagues { display: none; }
-    #leagues_btn { display: none; }
+   #leagues h3 { display: none; }
+    #leagues_btn { display: block; padding:  6px;}
 }
 
 /* SECTION */
-#content { min-height: 95vh; }
+#content { min-height: 500px; }
 #content2 { background-color: #6fa9ee; }
-#content3 { width: 100%; overflow: hidden; min-height: 95vh;}
+#content3 { width: 100%; overflow: hidden; min-height: 85vh;}
 #content4 { background-color: #ffa314; }
 section h3, section h4 { margin: 0px 0 10px 6px; font-size: 1em; font-weight: normal;padding: 3px;}
 
@@ -343,6 +361,7 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 
 /* CHECKOUT */
 #checkout p, #checkout h2 { color: #565656; }
+#checkout a { font-size: 80%; }
 #checkout h2 { margin: 15px; }
 #checkout .warn { font-weight: bold; }
 

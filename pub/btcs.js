@@ -19,22 +19,37 @@ $(function() {
 
 
 $(function() {
+    if (!localStorage['version'])
+    {
+        for(k in localStorage)
+            localStorage.removeItem(k);
+        localStorage['version'] = 1;
+    }
+})
 
-    /* toggle mobile menu */
+
+$(function() {
+
+    // toggle mobile menu 
     $('#menu-btn').on('click', function() { $('header').toggleClass('menu-active'); });
 
-    /* toggle mobile betslip */
+    // toggle mobile betslip 
     $('.betslip-btn').on('click', function() { 
-        $('section:not(#leagues):not(#checkout)').toggle();
+        $('body').toggleClass('betslip-open');
         fillBetslipBox();
+        updateLeagueDisplay();
     });
 
     $('.checkout-btn').on('click', function() { 
         checkout();
     
     });
+    // toggle mobile betslip 
+    $('#leagues_btn').on('click', function() { 
+        $('body').toggleClass('league-open');
+        updateLeagueDisplay();
+    });
 });
-
 
 
         
@@ -66,13 +81,13 @@ function getUsername()
     return localStorage['username'];
 }
 
-
 // end checkout process
 function stopCheckout() {
   markBetslipBets();
   delete window.active_betslip;
   $('body').removeClass('lightbox');
   $('#checkout').hide(); 
+  updateLeagueDisplay();
 }
 
 
@@ -127,7 +142,7 @@ function checkout() {
         data: JSON.stringify(slip),
         contentType: "application/json",
         success: function(data) { 
-            /* setup checkout form */
+            // setup checkout form 
             var uri = 'bitcoin:' + data +'?amount='+total;
             var img = '//chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
             $('#checkout .inner')
@@ -154,6 +169,7 @@ function checkout() {
 
 
 }
+
 
 function formatDate(iso) {
    function getLocaleShortDateString(d)
@@ -213,7 +229,6 @@ function formatDate(iso) {
     var dt = new Date(iso);
     return getLocaleShortDateString(dt) + '<br>' + ('0'+dt.getHours()).substr(-2,2) + ':' +  ('0'+dt.getMinutes()).substr(-2,2) 
 }
-
 // load games from server
 // always called after myaccount is loaded
 //
@@ -354,6 +369,9 @@ $(function() {
             $('#games li.selected').removeClass('selected')
             $li.addClass('selected');
             var league = $li.attr('data-league');
+            console.log($li.offset().top, $li.height(), $(window).scrollTop(), $(window).height());
+            if ($li.offset().top + $li.height() >  $(window).scrollTop()  + $(window).height())
+               scrollTo($li);
 
             $('#leagues li[data-league="'+league+'"]').addClass('gameselected');
         }
@@ -434,7 +452,6 @@ function fillBetslipBox() {
     }
     calcBetslipTotal();
 }
-
 // **** betslip event handling
 $(function() { 
 
@@ -480,7 +497,7 @@ $(function() {
         if ($('#betslip ul.games li').length == 0)
         {
             // closing
-            $('.betslip-btn').click();
+            if (isSmartPhone()) $('.betslip-btn').click();
         }
 
 
@@ -577,54 +594,35 @@ function updateLeagueDisplay() {
      $('#games p.n').toggle(($('#games h3:visible').length == 0));
 }
 
-// Hide Header on on scroll down
-var didScroll;
-var lastScrollTop = 0;
-var delta = 5;
-var navbarHeight = $('header').outerHeight();
 
-$(window).scroll(function(event){
-    didScroll = true;
-    $('header').toggleClass('menu-active', false); 
-
-    $('header').toggleClass('below', $(window).scrollTop() > ($(window).height()-70));
-});
-
-setInterval(function() {
-    if (didScroll) {
-        hasScrolled();
-        didScroll = false;
-    }
-}, 250);
-
-function forceUp() {
-      $('header').removeClass('nav-up').addClass('nav-down');
-      didScoll = false;
-}
-
-function hasScrolled() {
+$(window).scroll(function() {
     var st = $(this).scrollTop();
 
-    // Make sure they scroll more than delta
-    if(Math.abs(lastScrollTop - st) <= delta)
-        return;
-                                                         
-    // If they scrolled down and are past the navbar, add class .nav-up.
-    // This is necessary so you never see what is "behind" the navbar.
-    if (st > lastScrollTop && st > navbarHeight){
-        // Scroll Down
-        $('header').removeClass('nav-down').addClass('nav-up');
-    } else {
-        // Scroll Up
-        if(st + $(window).height() < $(document).height()) {
-            $('header').removeClass('nav-up').addClass('nav-down');
-        }
-    }
+    /* ipad doesn't support fixed, and seems to trip over header selection below */
+    var isiPad = navigator.userAgent.match(/iPad/i) != null;
+    if (isiPad) return;
 
-    lastScrollTop = st;
+    // desktop: fix header when scrolled below it
+    $('header').toggleClass('below', st > ($(window).height()-70));
 
     if (isSmartPhone())
         return;
+
+    // keep betslip on games div
+    var betslip_top = st - $('#content').offset().top + $('header .hdr').height() ;
+    if (betslip_top < 0) betslip_top = 0;
+    if (betslip_top + $('#betslip').height() > $('#content').height())
+        betslip_top = $('#content').height() - $('#betslip').height();
+    $('section#betslip').css('top', betslip_top);
+    //
+    // keep leagues on games div
+    var leagues_top = st - $('#content').offset().top + $('header .hdr').height() ;
+    if (leagues_top < 0) leagues_top = 0;
+    if (leagues_top + $('#leagues').height() > $('#content').height())
+        leagues_top = $('#content').height() - $('#leagues').height();
+    $('section#leagues').css('top', leagues_top);
+
+    // Highlight correct menu item 
     var bottom = st + $(window).height() - 50;
     $('ul#nav li.selected').removeClass('selected');
     if (bottom < $('#games').offset().top) 
@@ -641,12 +639,28 @@ function hasScrolled() {
       $('ul#nav li:eq(3)').addClass('selected');
         
 
-}
-
+});
 function isSmartPhone() {
     return $(window).width() <= 600;
 }
-/* Make a links smooth-scroll */
+
+function scrollTo(target) {
+
+     $target = $(target);
+     var target_top = $target.offset().top;
+     if (!isSmartPhone()) 
+         target_top -= $('header .hdr').height();
+     else 
+         target_top -= $('header').height();
+
+     $('html, body').stop().animate({
+         'scrollTop': target_top
+     }, 200, 'swing', function () {
+         //window.location.hash = target;
+     });
+}
+
+// Make a links smooth-scroll 
 $(function() {
   $('a[href^="#"]').on('click',function (e) {
       
@@ -654,22 +668,11 @@ $(function() {
         $('header').removeClass('nav-up').addClass('nav-down');
         $('header').toggleClass('menu-active', false); 
 
-        var target = this.hash,
-        $target = $(target);
-        var target_top = $target.offset().top;
+        scrollTo(this.hash);
 
-        if (!isSmartPhone()) 
-            target_top -= $('header .hdr').height();
-
-        $('html, body').stop().animate({
-            'scrollTop': target_top
-        }, 200, 'swing', function () {
-            //window.location.hash = target;
-        });
         return false;
     });
 });
-
 
 
 /* CHAT */
@@ -705,7 +708,6 @@ $(function() {
         return false;
     })
 })
-
 
 function loadChat()
 {
