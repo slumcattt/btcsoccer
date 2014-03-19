@@ -8,9 +8,9 @@
 
 /* RESETS & DEFAULTS*/
 
-html { font-family: sans-serif, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; color: #ebecf0;}
+html { font-family: sans-serif, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; color: #ebecf0; -webkit-font-smoothing: antialiased;}
 body { margin: 0; background: #434343; }
-input { border: 1px solid #565656; margin:0;}
+input { border: 1px solid #3c3c3c; margin:0;}
 ul { list-style:none; padding:0; margin:0; }
 table { border-spacing: 0; border-collapse: collapse; }
 input::-moz-focus-inner { border: 0; padding: 0; } /* Remove button padding in FF*/
@@ -35,7 +35,7 @@ header #logo {
    width:194px;
    height:42px;
    display:inline-block;
-   margin: 5px 3px;
+   margin: 16px 3px;
 }
 
 ul#nav li { 
@@ -60,9 +60,9 @@ nav ul li.selected {
    }
 
    header .hdr {
-      margin-top: -70px;
-      height: 70px;
-      background-color: #565656; 
+      margin-top: -88px;
+      height: 88px;
+      background-color: #3c3c3c; 
       width: 100%;
       z-index:9999;
    }
@@ -71,9 +71,9 @@ nav ul li.selected {
    header.below .hdr { position:fixed; top:0; margin-top: 0;}
 
    ul#nav { float: right; }
-   ul#nav li { display: inline-block; padding-top:25px; text-align: center; font-weight: 600; font-size: 120%; 
+   ul#nav li { display: inline-block; padding-top:25px; text-align: center; font-weight: 300; font-size: 120%; 
      height: 50px;
-     padding-top: 10px;
+     padding-top: 26px;
    }
    ul#nav li.selected  { border-top: 4px solid #ffb54b; }
    ul#nav li.selected a { color: #ffb54b; }
@@ -106,10 +106,13 @@ nav ul li.selected {
     #faq { width: 950px; margin: auto; }
 
     #chats { margin: auto; width: 950px; }
-    #chats #chatbox { width: 710px; margin: 15px 0 5px 240px; height: 75vh; background-color: #565656;position: relative;}
-    #chats input.m { display: block; float: left; margin: 5px 5px 15px 240px; width: 580px; }
-    #chats input.b { display: block; color: #ffb54b; float: right; }
-    #chats input { border: none; background-color: #565656; height: 25px; }
+    #chats #chatbox { width: 710px; margin: 15px 0 5px 240px; height: 75vh; background-color: #3c3c3c; position: relative; padding:6px 0;}
+	#chats input.m { display: block; float: left; margin: 0px 5px 15px 240px; width: 64%; padding: 0 0 0 12px; color:#ebecf0;}
+	#chats input.b { display: block; color: #ffb54b; float: right; width:10%;}
+	#chats input { border: none; background-color: #3c3c3c; height: 44px; }
+
+	#chats p { margin:2px 8px 0 8px;font-weight:300; font-size:75%;}
+	#chats p span.u {color:#6fa9e4;padding:0 12px;}
 
     #stats { width: 950px; margin: auto; }
 
@@ -141,26 +144,25 @@ nav ul li.selected {
    #betslip h3 { display: none; }
 
    header .hdr { 
-      height: 52px;
-      background-color: #565656; 
-      background: linear-gradient(#666, #1e1e1e); 
-      background: -webkit-linear-gradient(#666, #1e1e1e); 
+      height: 88px;
+      background-color: #3c3c3c; 
+	border-bottom: 1px solid #565656;
    }
 
 
    header {
       background-color: #fff568;
       position: fixed; 
-      height: 52px;
+      height: 88px;
       top: 0px;
       transition: top 0.2s ease-in-out;
       width: 100%;
       z-index:9999;
    }
-   .has-betslip header { height: 97px; }
+   .has-betslip header { height: 133px; }
 
-   #content { margin-top: 52px; }
-   .has-betslip #content { margin-top: 97px;}
+   #content { margin-top: 88px; }
+   .has-betslip #content { margin-top: 133px;}
    .betslip-btn { display: none; }
    .has-betslip .betslip-btn { display:block;}
 
@@ -197,22 +199,25 @@ nav ul li.selected {
       color: #333;
    }
 
-   #menu-btn { float:right; height: 32px; width: 32px; margin: 10px; background-image: url(img/icon_menu.png); 
-      background-repeat: no-repeat;
+   #menu-btn { float:right; height: 32px; width: 32px; margin: 32px 8px; background-image: url(img/icon_menu.png); 
+      background-repeat: no-repeat;    background-size: 24px 24px;
    }
 
-   header ul#nav { 
-      position: fixed; 
-      top: 52px;
-      right: 10px;
-   }
+
+header ul#nav {
+	position: fixed;
+	top: 88px;
+	right: 0px;
+	border-left: 1px solid #565656;
+}
 
    header ul#nav li { 
-      background: #565656;
-      padding: 5px;
-      height: 26px; }
-
-   .nav-up { top: -52px; }
+	background: #3c3c3c;
+	height: 36px;
+	padding: 12px 0 0 15px;
+	width: 180px;
+}
+   .nav-up { top: -88px; }
    /* hide menu behind button */
    header ul#nav { display: none; }
    header.menu-active ul#nav { display: block; }
@@ -220,7 +225,24 @@ nav ul li.selected {
 
    #leagues { display: none; }
    #leagues h3 { display: none; }
-    #leagues_btn { display: block; padding:  6px;}
+   #leagues_btn { display: block; padding: 18px 0 14px 12px;
+	background-color: #ffb54b;
+	margin: 0 50% 0 0;
+	background: url(img/league_arrow_down.png) no-repeat right #ffb54b;
+	background-position: 80% 50%; color:#434343;
+	}
+    section#leagues {background-color:#3c3c3c; margin-right:50%;	border-right: 1px solid #565656; }
+    
+    X.has-betslip #leagues_btn {display:none;}
+    
+
+    #chats #chatbox { margin:6px 12px; height: 75vh; background-color: #3c3c3c;padding:6px 0;}
+	#chats input {border: none; background-color: #3c3c3c; height: 44px; margin:0 6px 12px 12px;}
+	#chats input.m { float: left; width: 65%; padding: 0 0 0 12px; color:#ebecf0;}
+	#chats input.b { display: block; color: #ffb54b; float: right; width:20%; margin-right:12px;}
+	#chats p { margin:2px 8px 0 8px;font-weight:300; font-size:75%;}
+	#chats p span.u {color:#6fa9e4;padding:0 12px;}
+
 }
 
 /* SECTION */
@@ -237,6 +259,11 @@ section h3, section h4 { margin: 0px 0 10px 6px; font-size: 1em; font-weight: no
 .games li { background-color: #3c3c3c; border-top: 1px #565656 solid; margin-bottom:1px; }
 .games li.selected .overview { background-color: #ffb54b; color: #565656;}
 .games li .overview { cursor: pointer; }
+
+X.games li .overview:hover {
+background-color: #ffb54b;
+color: #434343;
+}
 
 
 /* BETS */
@@ -304,15 +331,16 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 #betslip .games { margin-bottom: 0px; }
 #betslip .games li { background-color: #fff568; color: #565656; }
 
+
 #betslip div.total-wager { background-color: #fff568; color: #545454; border-top: #545454 solid 1px; padding: 8px;}
 #betslip div.total-wager span { display:inline-block; width:50%; text-align:right; }
 #betslip div.total-wager span.v { display:inline-block; width:30%; text-align:right; }
-#betslip .return-address { width: 100%; font-size: 120%; text-align: center; padding: 10px; background-color: #565656;}
-#betslip .return-address-info { font-size: 70%; color: #ebecf0; padding: 5px; text-align: center; background-color: #565656;}
+#betslip .return-address { width: 100%; font-size: 100%; text-align: center; padding: 10px; background-color: #3c3c3c;}
+#betslip .return-address-info { font-size: 70%; color: #ebecf0; padding: 5px; text-align: center; background-color: #3c3c3c;}
 
 
 #betslip .button { 
-   text-align: center; background-color: #565656; color: #ffb54b; border-top: #ebecf0; padding: 10px; font-weight: 700; cursor: pointer;}
+   text-align: center; background-color: #3c3c3c; color: #ffb54b; border-top: #ebecf0; padding: 10px; font-weight: 500; cursor: pointer;}
 
 #betslip .overview { position: relative; }
 #betslip .overview .stake-edit { padding-top: 15px; margin: auto;text-align:center;}
@@ -331,31 +359,34 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 /*  FAQ */
 
 #faq { padding-top: 20px; }
-#faq li a { font-weight: 300; color: #565656; line-height:1.3em; }
-#faq h4 a { font-weight: 300; color: #ebecf0; padding-left: 12px; text-decoration: none; }
+#faq li a { color: #434343; line-height:1.3em; }
+#faq h4 a {  color: #434343; padding-left: 12px; text-decoration: none; }
 #faq p { font-weight: 300; color: #ebecf0; padding: 0 12px; }
 #faq li { padding: 0 12px; }
 
 
 /* LEAGUES */
 
-#leagues li { padding: 5px 5px 5px 45px; background: url(img/league_mark.png) no-repeat left; 
-    cursor: pointer; }
+#leagues li { padding: 5px 5px 5px 38px; background: url(img/league_mark.png) no-repeat left; 
+    cursor: pointer; background-position:8px 6px; font-size:85%;}
 #leagues li.selected { background-image: url(img/league_mark_selected.png);  }
-#leagues li.gameselected { background-color: #ffb54b; }
+#leagues li.gameselected { background-color: #ffb54b; color:#434343; }
 #leagues li.b { margin-top: 25px; }
+#leagues li:hover { background-color:#ffb54b; color:#434343;}
 
 /* STATS */
-#stats { padding: 25px; }
+#stats { padding: 12px; }
 #stats table.n th { text-align: left; }
 #stats table.n td { text-align: right; padding: 20px; font-size: 150%; font-weight: 700; color:#6fa9ee; }
-#stats .my { width: 450px; float: left;}
-#stats .global { width: 450px; float: right;}
+#stats .my { width: 450px; float: left; background-color:#3c3c3c;}
+#stats .global { width: 450px; float: right;background-color:#3c3c3c;}
 #stats br { clear: both; }
 
 #stats .a { display: none; }
 
 #stats .txs a { max-width: 150px; overflow:hidden; text-overflow: ellipsis; display: inline-block; }
+
+.statsheader	{background-color:#434343;}
 
 
 
@@ -366,10 +397,4 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 #checkout .warn { font-weight: bold; }
 
 /* CHATS */
-#chats input.m { display: block; float: left; margin: 5px 5px 15px 240px; width: 580px; }
-#chats input.b { display: block; color: #ffb54b; float: right; }
-#chats input { border: none; background-color: #565656; height: 25px; }
-
-#chats span.u { font-style: italic; }
 #chats #chatbox { overflow-y: scroll; }
-

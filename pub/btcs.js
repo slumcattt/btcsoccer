@@ -603,7 +603,7 @@ $(window).scroll(function() {
     if (isiPad) return;
 
     // desktop: fix header when scrolled below it
-    $('header').toggleClass('below', st > ($(window).height()-70));
+    $('header').toggleClass('below', st > ($(window).height()-88));
 
     if (isSmartPhone())
         return;
