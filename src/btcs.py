@@ -16,7 +16,7 @@ BITCOIND       = "http://bitcoinrpc:Am8eCsFJpvYqqbRaMVMJxMPP2tPczsFwD131iiKh68iM
 
 MAX_DAYS_BEFORE   = 3
 MAX_DAYS_AFTER    = 6
-DEADLINE_MINS = 10
+DEADLINE_MINS = 0
 
 MIN_BET  = Decimal('0.002')
 MAX_BET  = Decimal('10')
