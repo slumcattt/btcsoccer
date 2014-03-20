@@ -315,6 +315,7 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 .games li div.away {  width: 44%; }
 
 .games li div.stake {  margin: 10px 0 5px 5%; width: 28%;  font-size: 65%; float: left; }
+.games li div.stake.total {  clear: left; }
 .games li div.stake span {  font-size: 140%; font-weight: 500; }
 
 .games li br { clear:both; height: 4px; } 
