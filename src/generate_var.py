@@ -136,11 +136,13 @@ def generate_pub():
 
     # split in live/today/later
     now = datetime.utcnow()
-    if os.path.exists(btcs.path('input', 'matches_live.xml')):
-        now = modification_date(btcs.path('input', 'matches_live.xml'))
+    #if os.path.exists(btcs.path('input', 'matches_live.xml')):
+    #    now = modification_date(btcs.path('input', 'matches_live.xml'))
 
     maxtime_live = (now + timedelta(minutes = btcs.DEADLINE_MINS)).isoformat()
     maxtime_today = datetime(now.year, now.month, now.day, 23,59,59,0, None).isoformat()
+
+    logging.info('maxtime_live=' + maxtime_live)
 
     live  = [ game for game in games if game['date'] < maxtime_live]
     today = [ game for game in games if game['date'] >= maxtime_live and game['date'] < maxtime_today]
