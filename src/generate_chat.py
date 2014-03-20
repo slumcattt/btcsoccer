@@ -25,8 +25,13 @@ def generate_chat():
     msgs = r.lrange('chat', 0,100)[::-1]
     ar = []
     for msg in msgs:
-        msg = msg.split('/')
-        ar.append({"t": msg[0], "u": msg[1], "m": msg[2]})
+        try:
+            msg = msg.decode('utf8')
+            msg = msg.split('/')
+            ar.append({"t": msg[0], "u": msg[1], "m": msg[2]})
+        except:
+            logging.exception('Error during chat processing (msg=%s)' % repr(msg))
+
     render('chat.html', {"msgs": ar })
 
 
