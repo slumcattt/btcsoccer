@@ -31,10 +31,12 @@ $(function() {
 $(function() {
 
     // toggle mobile menu 
-    $('#menu-btn').on('click', function() { $('header').toggleClass('menu-active'); });
+    $('#menu-btn').on('click', function() { 
+        $('body').removeClass('league-open'); // close league menu
+        $('header').toggleClass('menu-active'); });
 
     // toggle mobile betslip 
-    $('.betslip-btn').on('click', function() { 
+    $('.betslip-btn, .back-btn').on('click', function() { 
         $('body').toggleClass('betslip-open');
         fillBetslipBox();
         updateLeagueDisplay();
@@ -407,6 +409,8 @@ function markBetslipBets() {
     }
 
     $('body').toggleClass('has-betslip', betslipcount>0);
+    if (betslipcount == 0)
+       $('body').removeClass('betslip-open');
 
     fillBetslipBox();
 
@@ -649,9 +653,9 @@ function scrollTo(target) {
      $target = $(target);
      var target_top = $target.offset().top;
      if (!isSmartPhone()) 
-         target_top -= $('header .hdr').height();
+         target_top -= $('header .hdr').height() - 2;
      else 
-         target_top -= $('header').height();
+         target_top -= $('header').height() - 2;
 
      $('html, body').stop().animate({
          'scrollTop': target_top

@@ -159,13 +159,15 @@ def generate_pub():
 
     # find latest txids from disk
     txids = os.listdir(btcs.path('tx/new', '')) 
-    txids.sort(key= lambda x: -os.path.getmtime(btcs.path('tx/new', x)))
-    txids = txids[:btcs.TX_HIST_COUNT]
 
     # load their data
     txs = [ { "txid": txid, "info": json.loads(open(btcs.path('tx/new',txid),'r').read()) }
             for txid 
             in txids]
+
+    txs.sort(key= lambda x: x['info']['game']['date'])
+    txs.reverse()
+    txs = txs[:btcs.TX_HIST_COUNT]
 
     def sumtx(txtype, txs):
         total = 0
@@ -180,8 +182,9 @@ def generate_pub():
 
     # we should transform tx output dict to array for mustache rendering
     for tx in txs:
-        tx['outputs'] = [ {"address": k, "amount":v} for k,v in tx['info']['outputs'].items()]
+        tx['outputs'] = [ {"address": k, "amount":v*1000} for k,v in tx['info']['outputs'].items()]
         tx['game'] = tx['info']['game']
+        tx['game']['date'] = tx['game']['date'][:10]
         tx['type'] = tx['info']['type'].replace('allwrong', 'refund')
     stats['txs'] = txs
 

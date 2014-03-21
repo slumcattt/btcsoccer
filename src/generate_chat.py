@@ -28,7 +28,7 @@ def generate_chat():
         try:
             msg = msg.decode('utf8')
             msg = msg.split('/')
-            ar.append({"t": msg[0], "u": msg[1], "m": msg[2]})
+            ar.append({"t": msg[0], "u": msg[1], "m": '/'.join(msg[2:])})
         except:
             logging.exception('Error during chat processing (msg=%s)' % repr(msg))
 
