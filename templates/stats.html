@@ -30,17 +30,35 @@
   <h3>20 most recent outgoing payments<h3>
 
   <table class="txs">
-    {{#txs}}
-    <tr><td>{{#game}}{{home}}-{{away}}{{/game}}
-        <td>{{#game}}{{result}}{{/game}}
-          <td>{{type}}
-            <td><a target="_new" href="http://blockr.io/tx/info/{{txid}}">{{txid}}</a>
-          <td>
-            <table>
-              {{#outputs}}
-              <tr><td>{{address}}<td>{{amount}}
-              {{/outputs}}
-            </table>
-    {{/txs}}
+    <thead>
+      <th>Match
+      <th>Date
+      <th>Result
+      <th>Status
+      <th>Transaction ID
+      <th>Wallet Addresses
+      <th>Amounts
+    </thead>
+    <tbody>
+      {{#txs}}
+      <tr><td>{{#game}}{{home}}-{{away}}{{/game}}
+          <td>{{#game}}{{date}}{{/game}}
+          <td>{{#game}}{{result}}{{/game}}
+            <td>{{type}}
+              <td><a target="_new" href="http://blockr.io/tx/info/{{txid}}">{{txid}}</a>
+            <td>
+              <table>
+                {{#outputs}}
+                <tr><td>{{address}}<td>{{amount}}
+                {{/outputs}}
+              </table>
+            <td>
+              <table>
+                {{#outputs}}
+                <tr><td>{{amount}}
+                {{/outputs}}
+              </table>
+      {{/txs}}
+    </tbody>
   </table>
 </div>

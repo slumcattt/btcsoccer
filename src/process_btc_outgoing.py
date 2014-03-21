@@ -59,6 +59,14 @@ def payout(bets, total, game, txtype):
             "outputs": outputs })
 
 
+def winner(result):
+    h,a = result.split('-')
+    if int(h) > int(a):
+        return 'HOME'
+    elif int(a) > int(h):
+        return 'AWAY'
+    else:
+        return 'DRAW'
 
 
 def process_outgoing(gameid):
@@ -69,8 +77,15 @@ def process_outgoing(gameid):
     
     if game['time'] in ['Abandonded', 'Postponed']:
         result = game['time'] # this will result in everyone is wrong
-    else:
+    elif game['time'] == ['Finished AP']:
+        # penalties, only count winner
+        result = winner(game['result'])
+        logging.info('Finished with penalties; winner=%s' % result)
+
+    elif game['time'] in ['Finished', 'Finished AET']:
         result = game['result']
+    else:
+        raise Error('Unknown result type: %s' % game['time'])
 
     logging.info('Processing game %s; Result is %s', gameid, result)
 
@@ -101,7 +116,7 @@ def process_outgoing(gameid):
                 bet['return_address'] = wallet.findreturnaddress(tx)
 
             if within_deadline(game, bet):
-                if bet['result'] == result:
+                if bet['result'] == result or winner(bet['result']) == result:
                     correctbet.append(bet)
                 else:
                     wrongbet.append(bet)

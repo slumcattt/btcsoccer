@@ -13,6 +13,7 @@
 
 
 import os
+import sys
 
 from xml.etree import ElementTree
 from datetime import date, datetime, timedelta
@@ -40,6 +41,15 @@ def load_from_xmlsoccer(url, match_file):
         logging.error('Error processing %s' % url);
         logging.exception('URL Error occured, ignoring')
     else:
+        # cache results
+        with open(match_file, 'w') as f:
+            f.write(matches_data)
+
+        # log results
+        with open(match_file.replace('data/', 'log/') + '-' + datetime.utcnow().isoformat(), 'w') as f:
+            f.write(matches_data)
+
+        # process results
         process_xml(matches_data, match_file)
 
 
@@ -66,13 +76,6 @@ def process_xml(matches_data, match_file):
     
     matches_xml  = ElementTree.fromstring(matches_data)
 
-    # cache results
-    with open(match_file, 'w') as f:
-        f.write(matches_data)
-
-    # log results
-    with open(match_file.replace('data/', 'log/') + '-' + datetime.utcnow().isoformat(), 'w') as f:
-        f.write(matches_data)
 
     new, updated, finished = 0, 0, 0
 
@@ -126,7 +129,7 @@ def process_xml(matches_data, match_file):
             continue
         
         # if game is done now, we need to remove it from new
-        if match['time'] == 'Finished':
+        if match['time'] in ['Finished', 'Abandonded', 'Cancelled', 'Postponed', 'Finished AET', 'Finished AP']:
             path = paths['finished']
             finished += 1
             if os.path.exists(paths['new']):
@@ -151,5 +154,13 @@ def process_xml(matches_data, match_file):
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
 
-    get_matches()
+    if len(sys.argv) == 2:
+        # we have a parameter; assume this is a match file to process
+        with open(sys.argv[1], 'r') as f:
+            match_data = f.read()
+
+        process_xml(match_data, sys.argv[1])
+
+    else:
+        get_matches()
 

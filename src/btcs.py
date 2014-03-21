@@ -26,6 +26,8 @@ BTCS_FEE = Decimal('0.02')
 
 BETSLIP_RETENTION_MINUTES = 240
 
+TX_HIST_COUNT = 5
+
 def path(sub, id):
     return '../data/%s/%s' % (sub, str(id))
 

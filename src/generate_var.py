@@ -79,6 +79,7 @@ def generate_pub():
             for h in range(6):
                 s = game['results'][a]['cols'][h]['score']
 
+                # calculate estimated multiplier
                 # the multiplier is total+bet / betted_here+bet
                 minbet = btcs.MIN_BET * 1000
                 mult = (game['total'] + minbet) / (minbet + s)
@@ -130,6 +131,8 @@ def generate_pub():
             if f in game:
                 if game[f]:
                     game[f] = game[f].replace(';',"\n")
+                else:
+                    game[f] = ' '
 
 
 
@@ -142,7 +145,6 @@ def generate_pub():
     maxtime_live = (now + timedelta(minutes = btcs.DEADLINE_MINS)).isoformat()
     maxtime_today = datetime(now.year, now.month, now.day, 23,59,59,0, None).isoformat()
 
-    logging.info('maxtime_live=' + maxtime_live)
 
     live  = [ game for game in games if game['date'] < maxtime_live]
     today = [ game for game in games if game['date'] >= maxtime_live and game['date'] < maxtime_today]
@@ -154,7 +156,13 @@ def generate_pub():
     render('games.html', alldata)
 
     # now we're gonne generate stats
+
+    # find latest txids from disk
     txids = os.listdir(btcs.path('tx/new', '')) 
+    txids.sort(key= lambda x: -os.path.getmtime(btcs.path('tx/new', x)))
+    txids = txids[:btcs.TX_HIST_COUNT]
+
+    # load their data
     txs = [ { "txid": txid, "info": json.loads(open(btcs.path('tx/new',txid),'r').read()) }
             for txid 
             in txids]
@@ -174,13 +182,11 @@ def generate_pub():
     for tx in txs:
         tx['outputs'] = [ {"address": k, "amount":v} for k,v in tx['info']['outputs'].items()]
         tx['game'] = tx['info']['game']
-        tx['type'] = tx['info']['type']
+        tx['type'] = tx['info']['type'].replace('allwrong', 'refund')
     stats['txs'] = txs
 
 
     render('stats.html', stats)
-
-    #print(alldata)
 
 
 
