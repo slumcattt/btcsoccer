@@ -322,12 +322,13 @@ table.bets th {  height: 2em; background-color: #3c3c3c; border-top: 1px #565656
 .games.live li.mb-possible div.inthemoney { border-color: transparent #fff568 transparent transparent; }
 
 /* live bet coloring for mb=mybet and nmb=notmybet */
-.games.live table.bets td.mb-wrong     { background-color: #8b1416; }
-.games.live table.bets td.mb-correct   { background: linear-gradient( to left bottom, #fff568 0%, #fff568 50%, #0ca965 50%, #0ca965 100%);  }
-.games.live table.bets td.mb-possible  { background-color: #fff568; }
-.games.live table.bets td.nmb-wrong    { background-color: #434343; }
-.games.live table.bets td.nmb-correct  { background-color: #0ca965; } 
-.games.live table.bets td.nmb-possible { background-color: #486e94; }
+
+.games.live table.bets td          { background-color: #486e94; }
+.games.live table.bets td.wrong    { background-color: #434343; }
+.games.live table.bets td.correct  { background-color: #0ca965; } 
+.games.live table.bets td.mybet           { background-color: #fff568; }
+.games.live table.bets td.mybet.wrong     { background-color: #8b1416; }
+.games.live table.bets td.mybet.correct   { background: linear-gradient( to left bottom, #fff568 0%, #fff568 50%, #0ca965 50%, #0ca965 100%);  }
 
 
 .games li div.live { text-align: center; font-style: italic; color: #d61e22; font-weight: bold; font-size: 75%; } 

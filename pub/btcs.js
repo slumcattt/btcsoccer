@@ -278,6 +278,7 @@ function setMyBets(bets)
         var total = 0;
         if (!$bettable.length)
             continue;
+
         for( var b in bets[game]) {
             var bet = bets[game][b]
 
@@ -285,23 +286,47 @@ function setMyBets(bets)
             totalbetsum += parseInt(bet.amount);
             totalbets++;
 
-            if ($bettable.length)
-            {
-                var fld = bet.result.split('-');
-                var $sel = $bettable.find('tr:eq(' + (parseInt(fld[1])+1) + ') td:eq(' + (parseInt(fld[0])) + ')');
-                var org = $sel.text().split('\n');
-                if (isNaN(parseInt(org[1]))) org[1] = 0;
-                org[1] = (parseInt(org[1]||0) + parseInt(bet.amount))
-                $sel.html(org[0] + '\n' + org[1] + '\n' + org[2]);
-                $sel.addClass('mybet');
-            }
+            var fld = bet.result.split('-');
+            /* find the correct table-cel */
+            var $sel = $bettable.find('tr:eq(' + (parseInt(fld[1])+1) + ') td:eq(' + (parseInt(fld[0])) + ')');
+            /* sum this bet to the middle number of this bet */
+            var org = $sel.text().split('\n');
+            if (isNaN(parseInt(org[1]))) org[1] = 0;
+            org[1] = (parseInt(org[1]||0) + parseInt(bet.amount))
+            $sel.html(org[0] + '\n' + org[1] + '\n' + org[2]);
+            $sel.addClass('mybet');
 
         }
             
+        /* full mystakes span */
         var $mystakes = $game.find('.stake.my span')
         $mystakes.text(total);
 
     }
+
+    $('.games.live li').each(function() {
+        var h = parseInt($('.home_score', this).text());
+        var a = parseInt($('.away_score', this).text());
+        var $trs = $('table tr', this);
+        $trs.eq(a).find('td:eq('+h+')').addClass('correct');
+        console.log('correct: ' ,h,a);
+        while(--h >= 0) {
+            $trs.find('td:eq('+h+')').addClass('wrong');
+            console.log('h',h);
+        }
+        while(--a >= 0) {
+            $trs.eq(a).find('td').addClass('wrong');
+            console.log('h',a);
+         }
+
+        if ($trs.find('.mybet.correct').length)
+            $(this).addClass('mb-correct');   
+        else if ($trs.find('.mybet:not(.wrong)').length)
+            $(this).addClass('mb-possible');   
+        else if ($trs.find('.mybet').length)
+            $(this).addClass('mb-wrong');   
+
+    })
     // fill stats
     $('#stats .my td').eq(2).text(totalbets);
     $('#stats .my td').eq(3).text(totalbetsum);
