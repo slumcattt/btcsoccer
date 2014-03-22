@@ -8,7 +8,9 @@ var default_amount        = 2;
 var max_amount            = 100;
 
 
-
+function isSmartPhone() {
+    return $(window).width() <= 600;
+}
 
 /* delayed load */
 $(function() {
@@ -666,10 +668,8 @@ $(window).scroll(function() {
         
 
 });
-function isSmartPhone() {
-    return $(window).width() <= 600;
-}
 
+/* Smooth scrolling */
 function scrollTo(target) {
 
      $target = $(target);
