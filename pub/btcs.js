@@ -306,17 +306,14 @@ function setMyBets(bets)
 
     $('.games.live li').each(function() {
         var h = parseInt($('.home_score', this).text());
-        var a = parseInt($('.away_score', this).text());
+        var a = parseInt($('.away_score', this).text()) + 1;
         var $trs = $('table tr', this);
-        $trs.eq(a).find('td:eq('+h+')').addClass('correct');
-        console.log('correct: ' ,h,a);
+        $trs.eq(a).find('td').eq(h).addClass('correct');
         while(--h >= 0) {
             $trs.find('td:eq('+h+')').addClass('wrong');
-            console.log('h',h);
         }
         while(--a >= 0) {
             $trs.eq(a).find('td').addClass('wrong');
-            console.log('h',a);
          }
 
         if ($trs.find('.mybet.correct').length)
