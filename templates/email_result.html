@@ -1,0 +1,30 @@
+<html>
+  <head>
+    <style>
+      td { border: #ccc 1px solid; }
+    </style>
+  </head>
+  <body>
+
+    <p>
+    Game result: {{#game}}{{home}} - {{away}} {{result}}{{/game}}
+    <p>
+    Your result:
+    <table>
+      <tr>
+      <th>My bet</th>
+      <th>Amount</th>
+      <th>Result</th>
+      <th>Payout</th>
+
+    {{#bets}}
+      <tr>
+        <td>{{result}}</td>
+        <td>{{amount}}</td>
+        <td>{{txtype}}</td>
+        <td>{{payout}}&nbsp;</td>
+
+      {{/bets}}
+
+  </body>
+</html>
