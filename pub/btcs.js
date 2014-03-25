@@ -257,6 +257,8 @@ function loadGames() {
                 
         if (window.my_bets)
             setMyBets(window.my_bets);
+
+        setInTheGame();
             
         if ($sel)
         {
@@ -306,6 +308,12 @@ function setMyBets(bets)
 
     }
 
+    // fill stats
+    $('#stats .my td').eq(2).text(totalbets);
+    $('#stats .my td').eq(3).text(totalbetsum);
+}
+
+function setInTheGame() {
     $('.games.live li').each(function() {
         var h = parseInt($('.home_score', this).text());
         var a = parseInt($('.away_score', this).text()) + 1;
@@ -326,9 +334,6 @@ function setMyBets(bets)
             $(this).addClass('mb-wrong');   
 
     })
-    // fill stats
-    $('#stats .my td').eq(2).text(totalbets);
-    $('#stats .my td').eq(3).text(totalbetsum);
 }
 
 // See if a payment has been made, so the betslip needs to be cleared and closed
