@@ -126,7 +126,7 @@ nav ul li.selected {
     #stats .global { width: 450px; float: right;}
 
 
-    #checkout img { float: left; margin: 15px; }
+    #checkout .qr { float: left; margin: 15px; }
     
 
     #games #hint {width:300px;}

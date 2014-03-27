@@ -88,7 +88,7 @@ function getUsername()
 // end checkout process
 function stopCheckout() {
   markBetslipBets();
-  delete window.active_betslip;
+  //delete window.active_betslip;
   $('body').removeClass('lightbox');
   $('#checkout').hide(); 
   updateLeagueDisplay();
@@ -175,6 +175,9 @@ function checkout() {
 
 }
 
+
+
+
 function checkout_step2(slip, total) {
 
    $('#checkout .inner').empty().append('<p>Creating address...</p>');
@@ -189,12 +192,14 @@ function checkout_step2(slip, total) {
         success: function(data) { 
             // setup checkout form 
             var uri = 'bitcoin:' + data +'?amount='+total;
-            var img = 'http://chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
+            //var img = 'http://chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
+            var $img = $('<div class="qr"></div>').qrcode({width: 164,height: 164, text:uri});
+
             $('#checkout .inner')
                 .empty()
                 .append('<input type="button" class="btn-remove" value="X">')
                 .append('<h2>Total: '+total+'</h2>')
-                .append('<img href="'+uri+'" src="'+img + '">')
+                .append($img)
                 .append('<p>Send exactly <span class="a">' + total + '</span> BTC (plus miner fee) to:')
                 .append('<p>Scan QR code or click the link below')
 
