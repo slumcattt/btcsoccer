@@ -38,7 +38,7 @@ def payout(bets, total, game, txtype):
 
     for bet in bets:
         amount = Decimal(bet['amount']) / divider * total
-        bet['payout'] = amount
+        bet['payout'] = "%.2f" % amount
         bet['txtype'] = txtype
 
         # could be betted twice thus add
