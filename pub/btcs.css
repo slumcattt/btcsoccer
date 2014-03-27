@@ -414,7 +414,7 @@ box-shadow:         5px 9px 5px 0px rgba(50, 50, 50, 0.2);}
    text-align: center; background-color: #3c3c3c; color: #ffb54b; border-top: #ebecf0; padding: 10px; font-weight: 500; cursor: pointer;}
 
 #betslip .overview { position: relative; }
-#betslip .overview .stake-edit { padding-top: 15px; margin: auto;text-align:center;}
+#betslip .overview .stake-edit { clear: both; padding-top: 15px; margin: auto;text-align:center;}
 .stake-edit span {font-size: 75%; }
 .stake-edit input { border: none; margin: 1px; height: 20px; }
 
