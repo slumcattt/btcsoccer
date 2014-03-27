@@ -97,28 +97,17 @@ function stopCheckout() {
 
 // save betslip on server and present payment address
 function checkout() {
-  $('#checkout').toggle(); 
-  $('body').addClass('lightbox');
+    $('#checkout').toggle(); 
+    $('body').addClass('lightbox');
 
-   $('#checkout .inner').empty().append('<p>Creating address...</p>');
+    // create betslip object
     var slip = {
         accountid: getAccountId(),
         bets: []
     };
-
-    var ret = $('input.return-address').val();
-    if (ret)
-    {
-        if (!/^[13][a-zA-Z0-9]{26,33}$/.test(ret))
-        {
-            alert('Invalid return address');
-            stopCheckout();
-            return;
-         }
-        slip.return_address = ret;
-    }
-
-    // calc total
+    
+    // calc total and add bets from localstorage 
+    // to betslip object
     var total = 0.0;
     for(var k in localStorage)
     {
@@ -131,12 +120,64 @@ function checkout() {
                 result: fld[1] + '-' + fld[2]
             });
             total += parseInt(localStorage[k]);
-
-
         }
     }
     total = (total/1000).toFixed(3);
 
+
+   // create dialog with return address & email */
+   $('#checkout .inner')
+       .empty()
+       .append('<input type="button" class="btn-remove" value="X">')
+       .append('<p><input type="button" class="btn-proceed" value="Proceed to Checkout &gt;&gt;">')
+       .append('<p><strong>Optional Settings</strong></p>')
+       .append('<p>1. Payouts will be returned to the senders address.'
+          + ' You can change the return address here (e.g. if you are using an online wallet service.)')
+       .append('<p><input placeholder="Paste your bitcoin address here" class="return-address">')
+       .append('<p>2. If you want to receive email notifications, enter your email address here.')
+       .append('<p><input placeholder="Enter email address" class="email-address">')
+
+    if (localStorage.return_address)
+        $('input.return-address').val(localStorage.return_address);
+    if (localStorage.email_address)
+        $('input.email-address').val(localStorage.email_address);
+       
+    $('#checkout .btn-remove').click(function() {
+       stopCheckout();
+    });
+    $('#checkout .btn-proceed').click(function() {
+        var ret = $('input.return-address').val();
+        if (ret)
+        {
+            if (!/^[13][a-zA-Z0-9]{26,33}$/.test(ret))
+            {
+                alert('Invalid return address');
+                return;
+            }
+            slip.return_address = ret;
+
+            localStorage['return_address'] = ret;
+        }
+        else
+            localStorage.removeItem('return_address');
+
+        var email = $('input.email-address').val();
+        if (email) {
+           slip.email_address = email;
+           localStorage['email_address'] = email;
+        }
+        else
+            localStorage.removeItem('email_address');
+        checkout_step2(slip, total);
+   });
+
+
+
+}
+
+function checkout_step2(slip, total) {
+
+   $('#checkout .inner').empty().append('<p>Creating address...</p>');
     delete window.active_betslip;
 
     $.ajax({
@@ -148,20 +189,17 @@ function checkout() {
         success: function(data) { 
             // setup checkout form 
             var uri = 'bitcoin:' + data +'?amount='+total;
-            var img = '//chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
+            var img = 'http://chart.apis.google.com/chart?cht=qr&chld=Q|2&chs=200&chl=' + uri;
             $('#checkout .inner')
                 .empty()
                 .append('<input type="button" class="btn-remove" value="X">')
                 .append('<h2>Total: '+total+'</h2>')
                 .append('<img href="'+uri+'" src="'+img + '">')
                 .append('<p>Send exactly <span class="a">' + total + '</span> BTC (plus miner fee) to:')
+                .append('<p>Scan QR code or click the link below')
+
                 .append('<p><a href="' +uri +'">'+data+'</a>')
                 .append('<p>Waiting for payment...');
-            if (!slip.return_address)
-            {
-               $('#checkout .inner').append('<p class="warn">Profits will be returned to the senders address.'
-                + ' Use a wallet, or an online service that gives you control of the senders address.');
-            }
                 
             $('#checkout .btn-remove').click(function() {
                 stopCheckout();
@@ -170,8 +208,6 @@ function checkout() {
             window.active_betslip = data;
          }
     });
-
-
 }
 
 
@@ -390,21 +426,39 @@ $(function() {
 
         var $li = $(this).closest('li');
 
+        $('#hint').remove();
+        $('#leagues li').removeClass('gameselected');
         if ($li.hasClass('selected'))
         {
+            // click selected game => deselect only
             $li.removeClass('selected');
-            $('#leagues li').removeClass('gameselected');
+
         }
         else
         {
             $('#games li.selected').removeClass('selected')
             $li.addClass('selected');
             var league = $li.attr('data-league');
-            console.log($li.offset().top, $li.height(), $(window).scrollTop(), $(window).height());
             if ($li.offset().top + $li.height() >  $(window).scrollTop()  + $(window).height())
                scrollTo($li);
 
             $('#leagues li[data-league="'+league+'"]').addClass('gameselected');
+
+            if (!localStorage.hintOpenGameClosed
+               && $(this).closest('.live').length == 0)
+            {
+                var $hint = $('<div id="hint"><p>Select end result(s) from the ScoreGrid below to add bets to your BetSlip</p></div>');
+                var $remove = $('<input type="button" class="btn-remove" value="X">');
+                $remove.click(function() {
+                    localStorage.hintOpenGameClosed = '1';
+                    $('#hint').remove();
+                });
+
+                $hint.prepend($remove);
+                $hint.css('top', $li.offset().top - $('#content').offset().top + 212 + (isSmartPhone() ? 50 : 0));
+                $hint.css('left', $li.offset().left - $('#content').offset().left + 60);
+                $('#games').append($hint);
+            }
         }
     })
 })
@@ -527,11 +581,6 @@ $(function() {
         localStorage.removeItem(k);
         $(this).closest('li').remove();
         markBetslipBets();
-        if ($('#betslip ul.games li').length == 0)
-        {
-            // closing
-            if (isSmartPhone()) $('.betslip-btn').click();
-        }
 
 
         
@@ -638,23 +687,6 @@ $(window).scroll(function() {
     // desktop: fix header when scrolled below it
     $('header').toggleClass('below', st > ($(window).height()-88));
 
-    if (isSmartPhone())
-        return;
-
-    // keep betslip on games div
-    var betslip_top = st - $('#content').offset().top + $('header .hdr').height() ;
-    if (betslip_top < 0) betslip_top = 0;
-    if (betslip_top + $('#betslip').height() > $('#content').height())
-        betslip_top = $('#content').height() - $('#betslip').height();
-    $('section#betslip').css('top', betslip_top);
-    //
-    // keep leagues on games div
-    var leagues_top = st - $('#content').offset().top + $('header .hdr').height() ;
-    if (leagues_top < 0) leagues_top = 0;
-    if (leagues_top + $('#leagues').height() > $('#content').height())
-        leagues_top = $('#content').height() - $('#leagues').height();
-    $('section#leagues').css('top', leagues_top);
-
     // Highlight correct menu item 
     var bottom = st + $(window).height() - 50;
     $('ul#nav li.selected').removeClass('selected');
@@ -670,6 +702,29 @@ $(window).scroll(function() {
       $('ul#nav li:eq(2)').addClass('selected');
     else
       $('ul#nav li:eq(3)').addClass('selected');
+
+    if (isSmartPhone())
+        return;
+
+    // keep betslip on games div
+    if ($('#betslip').height() < $(window).height() - $('.hdr').height())
+    {
+       var betslip_top = st - $('#content').offset().top + $('header .hdr').height() ;
+       if (betslip_top < 0) betslip_top = 0;
+       if (betslip_top + $('#betslip').height() > $('#content').height())
+           betslip_top = $('#content').height() - $('#betslip').height();
+       $('section#betslip').css('top', betslip_top);
+    }
+    else
+       $('section#betslip').css('top', 'auto');
+    //
+    // keep leagues on games div
+    var leagues_top = st - $('#content').offset().top + $('header .hdr').height() ;
+    if (leagues_top < 0) leagues_top = 0;
+    if (leagues_top + $('#leagues').height() > $('#content').height())
+        leagues_top = $('#content').height() - $('#leagues').height();
+    $('section#leagues').css('top', leagues_top);
+
         
 
 });

@@ -8,6 +8,7 @@ from decimal import Decimal
 import simplejson as json
 
 import btcs
+import notify_email
 
 import wallet
 
@@ -35,6 +36,22 @@ def process_incoming(betslip):
         logging.info('Betslip %s: Received %s, moving to received' % (betslip, recv))
         
         os.rename(btcs.path('bets/new', betslip), btcs.path('bets/received', betslip))
+
+        # attach game data for email
+        if 'email_address' in betslip_data:
+            for bet in betslip_data['bets']:
+                try:
+                    with open(btcs.path('games/new', bet['game']), 'r') as f:
+                        bet['game_data'] = json.loads(f.read())
+
+                except Exception:
+                    # only for email; do not trip over it
+                    pass
+            notify_email.sendmail('email_betslip.html', betslip_data, 
+                betslip_data['email_address'], 'Betslip payment received')
+
+            
+
 
     else:
         logging.warning('Betslip %s: Invalid amount received: %s, expected %s' % (betslip, recv, total))

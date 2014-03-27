@@ -11,6 +11,8 @@ import dateutil.parser
 import btcs
 import logging
 
+import notify_email
+
 import wallet
 
 DRYRUN = False
@@ -36,6 +38,8 @@ def payout(bets, total, game, txtype):
 
     for bet in bets:
         amount = Decimal(bet['amount']) / divider * total
+        bet['payout'] = amount
+        bet['txtype'] = txtype
 
         # could be betted twice thus add
         if bet['return_address'] in outputs:
@@ -43,7 +47,7 @@ def payout(bets, total, game, txtype):
 
         outputs[bet['return_address']] = amount
 
-    # from mbtc to btcs and make them floats
+    # from mbtc to btcs
     for o in outputs:
         outputs[o] = outputs[o] / Decimal(1000)
 
@@ -57,6 +61,10 @@ def payout(bets, total, game, txtype):
             "type": txtype,
             "game": game,
             "outputs": outputs })
+
+        return txid
+    else:
+        return 'dryrun'
 
 
 def winner(result):
@@ -107,13 +115,16 @@ def process_outgoing(gameid):
         tx = wallet.getlatesttx(betslipid)
         logging.info('TX = %s' % repr(tx))
 
-        # add latest transaction and return_address to bets
+        # add latest transaction and return_address and email_address to bets 
         for bet in gamebets:
             bet['latesttx'] = tx
             if 'return_address' in betslip:
                 bet['return_address'] = betslip['return_address']
             else:
                 bet['return_address'] = wallet.findreturnaddress(tx)
+
+            if 'email_address' in betslip:
+                bet['email_address'] = betslip['email_address']
 
             if within_deadline(game, bet):
                 if bet['result'] == result or winner(bet['result']) == result:
@@ -135,23 +146,46 @@ def process_outgoing(gameid):
     if invalidbet:
         logging.info('Invalid: ' + repr(invalidbet))
 
-        payout(invalidbet, sum_bets(invalidbet), game, 'invalid')
+        payout_tx = payout(invalidbet, sum_bets(invalidbet), game, 'invalid')
 
     if len(correctbet) >0:
         logging.info('Correct: ' + repr(correctbet))
         logging.info('Wrong  : ' + repr(wrongbet))
 
         total = sum_bets(wrongbet) * (Decimal('1') - btcs.BTCS_FEE) + sum_bets(correctbet)
-        logging.info('Total wrong %s, total correct %s payout %s' % (repr(sum_bets(wrongbet)), repr(sum_bets(correctbet)), repr(total)))
-        payout(correctbet, total, game, 'winnings' )
+        logging.info('Total wrong %s, total correct %s payout %s' % (
+            repr(sum_bets(wrongbet)), repr(sum_bets(correctbet)), repr(total)))
+        payout_tx = payout(correctbet, total, game, 'winnings' )
 
     elif len(wrongbet) > 0:
         logging.info('Only wrong bets: ' + repr(wrongbet))
 
-        payout(wrongbet, sum_bets(wrongbet), game, 'allwrong' )
+        payout_tx = payout(wrongbet, sum_bets(wrongbet), game, 'allwrong' )
 
 
-    
+    # grab all email_addresses (ignore invalids)
+    allbets = wrongbet + correctbet
+    allemails = set([ bet['email_address'] for bet in allbets if 'email_address' in bet])
+
+    for email in allemails:
+        data = { 
+            "email": email,
+            "game": game, 
+            "txid": payout_tx,
+            "bets": [ bet for bet in allbets if 'email_address' in bet and bet['email_address'] == email]
+        }
+
+        for bet in data['bets']:
+            if not 'txtype' in bet:
+                bet['txtype'] = 'lost'
+            elif bet['txtype'] == 'allwrong':
+                bet['txtype'] = 'refund'
+            else:
+                bet['txtype'] = 'won'
+
+        subj = 'Result: %s - %s  %s' % (game['home'], game['away'], game['result'])
+        notify_email.sendmail('email_result.html', data, email, subj)
+
 
     if not DRYRUN:
         os.rename(btcs.path('games/process', gameid),

@@ -1,30 +1,49 @@
 <html>
   <head>
     <style>
-      td { border: #ccc 1px solid; }
+    td { border: 0; }
+	html { font-family: sans-serif, "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; color: #3c3c3c; }
+    .team	{font-weight:600;}
+    .result	{font-weight:600;}
+    table {width: 400px;}
+    tr	{text-align: center;}
+    th .small {font-size:75%;}
     </style>
   </head>
   <body>
 
-    <p>
-    Game result: {{#game}}{{home}} - {{away}} {{result}}{{/game}}
-    <p>
-    Your result:
-    <table>
-      <tr>
-      <th>My bet</th>
-      <th>Amount</th>
-      <th>Result</th>
-      <th>Payout</th>
 
-    {{#bets}}
-      <tr>
-        <td>{{result}}</td>
-        <td>{{amount}}</td>
-        <td>{{txtype}}</td>
-        <td>{{payout}}&nbsp;</td>
-
-      {{/bets}}
-
+<img src="https://btcsoccer.com/img/btcsoccer_logo_email.png">
+<p>Hi {{email}}, here is the result of your recent BTCsoccer bet.</p>
+{{#game}}<p> Full time result: <span class="team">{{home}}</span> - <span class="team">{{away}}</span><span class="result"> {{result}} </result></p>
+{{/game}}
+      <p> Your Wager &amp; Payment Status:
+        <table>
+          <tbody>
+            <tr>
+              <th>My bet</th>
+              <th>My Stake <span class="small">(mBTC)</span></th>
+              <th>Status</th>
+              <th>Payout</th>
+            </tr>
+            {{#bets}}
+            <tr>
+              <td class="result">{{result}}</td>
+              <td>{{amount}}</td>
+              <td>{{txtype}}</td>
+              <td>{{payout}}&nbsp;</td>
+            </tr>
+            {{/bets}}
+          </tbody>
+        </table>
+      </p>
+      <p>
+        <a target="_new" href="http://blockr.io/tx/info/{{txid}}">Click here to view transaction details</a>
+      </p>
+      <br >
+		<p>
+		Best regards,<br>
+		The BTCsoccer team
+		</p>
   </body>
 </html>
