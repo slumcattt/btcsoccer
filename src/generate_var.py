@@ -178,7 +178,7 @@ def generate_pub():
     stats['total_tx_invalid'] = sumtx('invalid', txs)
 
     with open('../log/stats.log', 'a') as f:
-        f.write(now.isoformat() + ',' + ','.join([str(f) for f in stats.values()]))
+        f.write(now.isoformat() + ',' + ','.join([str(f) for f in stats.values()])+"\n")
 
     txs.sort(key= lambda x: x['info']['game']['date'])
     txs.reverse()

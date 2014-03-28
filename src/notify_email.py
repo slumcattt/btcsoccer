@@ -37,4 +37,5 @@ def sendmail(template, data, address, subject):
 
 
 if __name__ == '__main__':
-    sendmail('email_betslip.html', {}, 'tomas@tomasvdw.nl')
+    sendmail('email_betslip.html', {}, 'tomas@tomasvdw.nl', 'Test')
+

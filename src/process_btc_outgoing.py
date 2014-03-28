@@ -93,7 +93,7 @@ def process_outgoing(gameid):
     elif game['time'] in ['Finished', 'Finished AET']:
         result = game['result']
     else:
-        raise Error('Unknown result type: %s' % game['time'])
+        raise Exception('Unknown result type: %s' % game['time'])
 
     logging.info('Processing game %s; Result is %s', gameid, result)
 

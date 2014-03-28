@@ -41,10 +41,7 @@ except ImportError:
 import base64
 import simplejson as json
 import decimal
-try:
-    import urllib.parse as urlparse
-except ImportError:
-    import urlparse
+import urlparse
 
 USER_AGENT = "AuthServiceProxy/0.1"
 
