@@ -3,6 +3,7 @@
 import logging
 import logging.handlers
 import time
+import os
 
 import load_games
 import process_btc_incoming
@@ -48,6 +49,11 @@ while True:
     libc.sigrelse(signal.SIGTERM)
     libc.sigrelse(signal.SIGINT)
     libc.sigrelse(signal.SIGHUP)
+
+    if os.path.exists('../stopmark'):
+        logging.info('Clean shutdown initiated')
+        os.remove('../stopmark')
+        break
 
     time.sleep(5)
 

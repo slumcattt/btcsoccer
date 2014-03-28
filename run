@@ -2,7 +2,7 @@
 
 cd src
 
-if  ps aux | grep '[b]btcs_webserve' 
+if  ps aux | grep '[b]tcs_webserve' 
 then 
    echo 'btcs_webserve already running'
 else 
@@ -15,7 +15,7 @@ then
    echo 'Process_all already running'
 else 
    echo 'Starting process_all..' 
-   nohup ./process_all.py &
+   nohup ./process_all.py 2>&1 >> /dev/null &
 fi
 
 cd ..
