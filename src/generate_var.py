@@ -165,9 +165,6 @@ def generate_pub():
             for txid 
             in txids]
 
-    txs.sort(key= lambda x: x['info']['game']['date'])
-    txs.reverse()
-    txs = txs[:btcs.TX_HIST_COUNT]
 
     def sumtx(txtype, txs):
         total = 0
@@ -180,6 +177,13 @@ def generate_pub():
     stats['total_tx_allwrong'] = sumtx('allwrong', txs)
     stats['total_tx_invalid'] = sumtx('invalid', txs)
 
+    with open('../log/stats.log', 'a') as f:
+        f.write(now.isoformat() + ',' + ','.join([str(f) for f in stats.values()]))
+
+    txs.sort(key= lambda x: x['info']['game']['date'])
+    txs.reverse()
+    txs = txs[:btcs.TX_HIST_COUNT]
+
     # we should transform tx output dict to array for mustache rendering
     for tx in txs:
         tx['outputs'] = [ {"address": k, "amount":v*1000} for k,v in tx['info']['outputs'].items()]
@@ -187,6 +191,7 @@ def generate_pub():
         tx['game']['date'] = tx['game']['date'][:10]
         tx['type'] = tx['info']['type'].replace('allwrong', 'refund')
     stats['txs'] = txs
+
 
 
     render('stats.html', stats)
