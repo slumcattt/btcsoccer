@@ -5,14 +5,14 @@ from decimal import *
 import simplejson as json
 
 SOCCER_URL   = "http://www.xmlsoccer.com/FootballData.asmx"
-SOCCER_KEY   = "PHVDAYLCCFJMPDZSUODPDARGUNEWQFEJEZBAXLKFEJQMBTUNVH"
+SOCCER_KEY   = ""
 
 LEAGUES      = ('Bundesliga', 'Europe League', 'Serie A', 'La Liga', 
                 'Eredivisie', 'Champions League', 'English Premier League')
 
 
 
-BITCOIND       = "http://bitcoinrpc:Am8eCsFJpvYqqbRaMVMJxMPP2tPczsFwD131iiKh68iM@127.0.0.1:8332"
+BITCOIND       = "http://bitcoinrpc:X127.0.0.1:8332"
 
 MAX_DAYS_BEFORE   = 3
 MAX_DAYS_AFTER    = 6

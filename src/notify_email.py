@@ -10,7 +10,7 @@ import logging
 SENDER = 'notify@btcsoccer.com'
 SERVER = 'neomailbox.net'
 USER   = 'tomas'
-PASS   = 'GiUoTCZVV0'
+PASS   = ''
 
 def sendmail(template, data, address, subject):
 
